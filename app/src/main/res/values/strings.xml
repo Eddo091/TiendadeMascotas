@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">TiendadeMascotas</string>
     <string name="buscar">Buscar</string>
+    <string name="nombre">NOMBRE</string>
+    <string name="cod_producto">COD PRODUCTO</string>
+    <string name="marca">MARCA</string>
+    <string name="precio">PRECIO</string>
+    <string name="guardar">Guardar</string>
 </resources>

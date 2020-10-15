@@ -3,7 +3,9 @@ package com.example.tiendademascotas;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.net.wifi.aware.PublishConfig;
+import android.content.Intent;
 import android.os.AsyncTask;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -35,7 +37,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
         obtenerDatosMascota objMascotas = new obtenerDatosMascota();
-        objMascotas.execute(  );
+        objMascotas.execute();
+        FloatingActionButton btnAgregarNuevaMasc = findViewById( R.id.btnAgregarProductoMas );
+        btnAgregarNuevaMasc.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                agregarNuevaMascota();
+            }
+        } );
 
     }
     private class obtenerDatosMascota extends AsyncTask<Void, Void, String>{
@@ -88,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ex){
             Toast.makeText(MainActivity.this, "Error al mostrar los datos: " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
+    }
+    private void agregarNuevaMascota() {
+        Intent nuevamascota = new Intent( MainActivity.this, agregar_enmascotas.class );
+        startActivity( nuevamascota );
+
     }
 }
 
