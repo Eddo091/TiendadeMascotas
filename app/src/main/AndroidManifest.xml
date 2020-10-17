@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".agregar_enmascotas"></activity>
+        <activity android:name=".agregar_entienda"></activity>
     </application>
 
 </manifest>

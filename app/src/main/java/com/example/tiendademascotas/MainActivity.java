@@ -1,8 +1,7 @@
 package com.example.tiendademascotas;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.app.Activity;
-import android.net.wifi.aware.PublishConfig;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.text.Editable;
@@ -17,27 +16,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import java.io.BufferedWriter;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.util.ArrayList;
-import java.util.List;
-import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
     JSONArray datosJSON;
@@ -57,25 +49,25 @@ public class MainActivity extends AppCompatActivity {
         di = new DetectarmiInternet(getApplicationContext());
         //Si hay conección
         if (di.HayConexcionaInternet()) {
-            conexionservidor objMascotas = new conexionservidor();
-            objMascotas.execute( uc.url_consulta, "GET" );
+            conexionservidor objTiendaa = new conexionservidor();
+            objTiendaa.execute( uc.url_consulta, "GET" );
         } else  {
             Toast.makeText(getApplicationContext(), "No hay conexion a internet.", Toast.LENGTH_LONG).show();
         }
 
-        FloatingActionButton btnAgregarNuevaMasc = findViewById( R.id.btnAgregarProductoMas );
-        btnAgregarNuevaMasc.setOnClickListener( new View.OnClickListener() {
+        FloatingActionButton btnAgregarNuevaTie = findViewById( R.id.btnAgregarProductoTie );
+        btnAgregarNuevaTie.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                agregarNuevaMascota( "nuevo", jsonObject );
+                agregarNuevaTienda( "nuevo", jsonObject );
 
             }
         } );
-        buscarMascota();
+        buscarTienda();
 
     }
-    void buscarMascota(){
-        final TextView tempVal = (TextView)findViewById(R.id.txtBuscarProductoMascota);
+    void buscarTienda(){
+        final TextView tempVal = (TextView)findViewById(R.id.txtBuscarProductoTienda);
         tempVal.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -134,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             try{
                 jsonObject = new JSONObject(s);
                 datosJSON = jsonObject.getJSONArray("rows");
-                mostrarDatosMascota();
+                mostrarDatosTienda();
             }catch (Exception ex){
                 Toast.makeText(MainActivity.this, "Error la parsear los datos: " + ex.getMessage(), Toast.LENGTH_LONG).show();
             }
@@ -160,12 +152,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mnxAgregarMasco:
-                agregarNuevaMascota( "nuevo", jsonObject );
+                agregarNuevaTienda( "nuevo", jsonObject );
                 return true;
 
             case R.id.mnxModificarMasco:
                 try {
-                    agregarNuevaMascota( "modificar", datosJSON.getJSONObject( posicion ) );
+                    agregarNuevaTienda( "modificar", datosJSON.getJSONObject( posicion ) );
                 } catch (Exception ex) {
                 }
                 return true;
@@ -181,17 +173,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 //agregar
-    private void agregarNuevaMascota(String accion, JSONObject jsonObject) {
+    private void agregarNuevaTienda(String accion, JSONObject jsonObject) {
         try {
             Bundle enviarParametros = new Bundle();
             enviarParametros.putString( "accion", accion );
-            enviarParametros.putString( "dataAmigo", jsonObject.toString() );
+            enviarParametros.putString( "dataTienda", jsonObject.toString() );
 
-            Intent agregarMasco = new Intent( MainActivity.this, agregar_enmascotas.class );
-            agregarMasco.putExtras( enviarParametros );
-            startActivity( agregarMasco );
+            Intent agregarTienda = new Intent( MainActivity.this, agregar_entienda.class );
+            agregarTienda.putExtras( enviarParametros );
+            startActivity( agregarTienda );
         } catch (Exception e) {
-            Toast.makeText( getApplicationContext(), "Error al llamar agregar Mascota: " + e.toString(), Toast.LENGTH_LONG ).show();
+            Toast.makeText( getApplicationContext(), "Error al llamar agregar Tienda: " + e.toString(), Toast.LENGTH_LONG ).show();
         }
     }
     //eliminar
@@ -210,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                                         datosJSON.getJSONObject(posicion).getJSONObject("value").getString("_rev"), "DELETE");
 
                             }catch (Exception ex){
-                                Toast.makeText(getApplicationContext(), "Error al intentar eliminar en mascota: "+ ex.getMessage() , Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Error al intentar eliminar en Tienda: "+ ex.getMessage() , Toast.LENGTH_LONG).show();
                             }
                             dialogInterface.dismiss();
                         }
@@ -233,8 +225,8 @@ public class MainActivity extends AppCompatActivity {
             //Mostrar datos
 
 
-    private void mostrarDatosMascota (){
-        ListView ltsMascotas = findViewById( R.id.ltsTiendaMascotaCouchDB );
+    private void mostrarDatosTienda (){
+        ListView ltsMascotas = findViewById( R.id.ltsTiendaCouchDB );
         try {
 
             final ArrayList<String> arrayList = new ArrayList<>();
@@ -249,56 +241,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Error al mostrar los datos: " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-    private class eliminarDatosMascota extends AsyncTask<String,String, String> {
-        HttpURLConnection urlConnection;
 
-        @Override
-        protected String doInBackground(String... parametros) {
-            StringBuilder stringBuilder = new StringBuilder();
-            String jsonResponse = null;
-            try {
-                URL url = new URL( uc.url_mto +
-                        datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "_id" ) + "?rev=" +
-                        datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "_rev" ) );
-
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod( "DELETE" );
-
-                InputStream in = new BufferedInputStream( urlConnection.getInputStream() );
-                BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
-
-                String inputLine;
-                StringBuffer stringBuffer = new StringBuffer();
-                while ((inputLine = reader.readLine()) != null) {
-                    stringBuffer.append( inputLine + "\n" );
-                }
-                if (stringBuffer.length() == 0) {
-                    return null;
-                }
-                jsonResponse = stringBuffer.toString();
-                return jsonResponse;
-            } catch (Exception ex) {
-                //
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
-                if (jsonObject.getBoolean("ok")) {
-                    Toast.makeText(getApplicationContext(), "Datos de amigo guardado con exito", Toast.LENGTH_SHORT).show();
-                    conexionservidor objObtenerTMascota = new conexionservidor();
-                    objObtenerTMascota.execute();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error al intentar guardar datos de Mascota", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Error al guardar Mascota: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
     }
-}
 
 

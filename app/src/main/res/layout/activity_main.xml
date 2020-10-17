@@ -7,21 +7,21 @@
     tools:context=".MainActivity">
 
     <EditText
-        android:id="@+id/txtBuscarProductoMascota"
+        android:id="@+id/txtBuscarProductoTienda"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:autofillHints=""
         android:hint="@string/buscar"
         android:inputType="text" />
     <ListView
-        android:id="@+id/ltsTiendaMascotaCouchDB"
+        android:id="@+id/ltsTiendaCouchDB"
         android:layout_marginTop="60dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </ListView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnAgregarProductoMas"
+        android:id="@+id/btnAgregarProductoTie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

@@ -23,53 +23,52 @@ import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class agregar_enmascotas extends AppCompatActivity {
+public class agregar_entienda extends AppCompatActivity {
     String resp, accion, id, rev;
+    utilidadescomunes uc;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_agregar_enmascotas );
+        setContentView( R.layout.activity_agregar_entienda );
         try {
-            FloatingActionButton btnMostrarAmigos = findViewById(R.id.btnMostrarMasc);
-            btnMostrarAmigos.setOnClickListener(new View.OnClickListener() {
+            FloatingActionButton btnMostrarTienda = findViewById(R.id.btnMostrarTie);
+            btnMostrarTienda.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mostrarMascota();
                 }
             });
-            Button btnGuardarMasc = findViewById( R.id.btnGuardarMasc );
-            btnGuardarMasc.setOnClickListener( new View.OnClickListener() {
+            Button btnGuardarTie = findViewById( R.id.btnMostrarTie );
+            btnGuardarTie.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    guardarMascota();
+                    guardarTie();
                 }
             } );
-            mostrarDatosMascota();
+            mostrarDatosTienda();
         } catch (Exception ex){
-            Toast.makeText(getApplicationContext(), "Error al agregar en Tienda Mascota: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Error al agregar en Tienda Online: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
         }
 
 
     }
 
-    void mostrarDatosMascota(){
+    void mostrarDatosTienda(){
         try {
             Bundle recibirParametros = getIntent().getExtras();
             accion = recibirParametros.getString("accion");
             if (accion.equals("modificar")){
-                JSONObject dataMascota = new JSONObject(recibirParametros.getString("dataMascota")).getJSONObject("value");
+                JSONObject dataMascota = new JSONObject(recibirParametros.getString("dataTienda")).getJSONObject("value");
 
-                TextView tempVal = (TextView)findViewById(R.id.txtCodigoMasc);
+                TextView tempVal = (TextView)findViewById(R.id.txtCodigoTie);
                 tempVal.setText(dataMascota.getString("codigo"));
 
-                tempVal = (TextView)findViewById(R.id.txtNombreMasc);
-                tempVal.setText(dataMascota.getString("nombre"));
+                tempVal = (TextView)findViewById(R.id.txtProductoTie);
+                tempVal.setText(dataMascota.getString("Producto"));
 
-                tempVal = (TextView)findViewById(R.id.txtMarcaMasc);
-                tempVal.setText(dataMascota.getString("direccion"));
+                tempVal = (TextView)findViewById(R.id.txtPrecioTie);
+                tempVal.setText(dataMascota.getString("Precio"));
 
-                tempVal = (TextView)findViewById(R.id.txtPrecioMasc);
-                tempVal.setText(dataMascota.getString("telefono"));
 
                 id = dataMascota.getString("_id");
                 rev = dataMascota.getString("_rev");
@@ -79,38 +78,36 @@ public class agregar_enmascotas extends AppCompatActivity {
         }
     }
     private void mostrarMascota(){
-        Intent mostrarAmigos = new Intent(agregar_enmascotas.this, MainActivity.class);
+        Intent mostrarAmigos = new Intent( agregar_entienda.this, MainActivity.class);
         startActivity(mostrarAmigos);
     }
 
-    private void guardarMascota(){
-        TextView tempVal = findViewById(R.id.txtCodigoMasc);
+    private void guardarTie(){
+        TextView tempVal = findViewById(R.id.txtCodigoTie);
         String codigoprod = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.txtNombreMasc);
+        tempVal = findViewById(R.id.txtProductoTie);
         String nombre = tempVal.getText().toString();
 
-        tempVal = findViewById(R.id.txtMarcaMasc);
-        String marca = tempVal.getText().toString();
-
-        tempVal = findViewById(R.id.txtPrecioMasc);
+        tempVal = findViewById(R.id.txtPrecioTie);
         String precio = tempVal.getText().toString();
 
+
+
         try {
-            JSONObject datosMasc = new JSONObject();
-            datosMasc.put("Codigo Producto", codigoprod);
-            datosMasc.put("Nombre", nombre);
-            datosMasc.put("Marca", marca);
-            datosMasc.put("Precio", precio);
-            enviarDatosMasc objGuardarMasc = new enviarDatosMasc();
-            objGuardarMasc.execute(datosMasc.toString());
+            JSONObject datosTie = new JSONObject();
+            datosTie.put("Codigo", codigoprod);
+            datosTie.put("Producto", nombre);
+            datosTie.put("Precio", precio);
+            enviarDatosTie objGuardarTie = new enviarDatosTie();
+            objGuardarTie.execute(datosTie.toString());
 
         }catch (Exception ex){
             Toast.makeText(getApplicationContext(), "Error: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
-    private class enviarDatosMasc extends AsyncTask<String,String, String> {
+    private class enviarDatosTie extends AsyncTask<String,String, String> {
         HttpURLConnection urlConnection;
         @Override
         protected String doInBackground(String... parametros) {
@@ -119,7 +116,7 @@ public class agregar_enmascotas extends AppCompatActivity {
             String jsonDatos = parametros[0];
             BufferedReader reader;
             try {
-                URL url = new URL("http://192.168.0.15:5984/tiendamascotas/");
+                URL url = new URL(uc.url_mto);
                 urlConnection = (HttpURLConnection)url.openConnection();
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
@@ -161,13 +158,13 @@ public class agregar_enmascotas extends AppCompatActivity {
             try{
                 JSONObject jsonObject = new JSONObject(s);
                 if(jsonObject.getBoolean("ok")){
-                    Toast.makeText(getApplicationContext(), "Datos de Mascota guardado con exito", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Datos de Tienda guardado con exito", Toast.LENGTH_SHORT).show();
                     mostrarMascota();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Error al intentar guardar datos de Mascota", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Error al intentar guardar datos de Tienda", Toast.LENGTH_SHORT).show();
                 }
             }catch (Exception e){
-                Toast.makeText(getApplicationContext(), "Error al guardar Mascota: "+e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Error al guardar Tienda: "+e.getMessage(), Toast.LENGTH_LONG).show();
             }
         }
     }
