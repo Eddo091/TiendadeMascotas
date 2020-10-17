@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayAdapter<String> stringArrayAdapter;
     utilidadescomunes uc;
     DetectarmiInternet di;
-
+//Actualizacion
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
