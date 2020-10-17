@@ -79,8 +79,8 @@ public class agregar_enmascotas extends AppCompatActivity {
         }
     }
     private void mostrarMascota(){
-        Intent mostrarAmigos = new Intent(agregar_enmascotas.this, MainActivity.class);
-        startActivity(mostrarAmigos);
+        Intent mostrarMascota = new Intent(agregar_enmascotas.this, MainActivity.class);
+        startActivity(mostrarMascota);
     }
 
     private void guardarMascota(){
