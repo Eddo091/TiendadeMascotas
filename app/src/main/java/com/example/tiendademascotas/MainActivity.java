@@ -226,17 +226,17 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void mostrarDatosTienda (){
-        ListView ltsMascotas = findViewById( R.id.ltsTiendaCouchDB );
+        ListView ltsTienda = findViewById( R.id.ltsTiendaCouchDB );
         try {
 
             final ArrayList<String> arrayList = new ArrayList<>();
             final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>( MainActivity.this, android.R.layout.simple_list_item_1, arrayList );
-            ltsMascotas.setAdapter( stringArrayAdapter );
+            ltsTienda.setAdapter( stringArrayAdapter );
             for (int i = 0; i < datosJSON.length(); i++) {
                 stringArrayAdapter.add( datosJSON.getJSONObject( i ).getJSONObject( "value" ).getString( "nombre" ) );
             }
             stringArrayAdapter.notifyDataSetChanged();
-            registerForContextMenu( ltsMascotas );
+            registerForContextMenu( ltsTienda );
         } catch (Exception ex){
             Toast.makeText(MainActivity.this, "Error al mostrar los datos: " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }

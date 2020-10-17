@@ -35,7 +35,7 @@ public class agregar_entienda extends AppCompatActivity {
             btnMostrarTienda.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mostrarMascota();
+                    mostrarTienda();
                 }
             });
             Button btnGuardarTie = findViewById( R.id.btnMostrarTie );
@@ -58,28 +58,28 @@ public class agregar_entienda extends AppCompatActivity {
             Bundle recibirParametros = getIntent().getExtras();
             accion = recibirParametros.getString("accion");
             if (accion.equals("modificar")){
-                JSONObject dataMascota = new JSONObject(recibirParametros.getString("dataTienda")).getJSONObject("value");
+                JSONObject dataTienda = new JSONObject(recibirParametros.getString("dataTienda")).getJSONObject("value");
 
                 TextView tempVal = (TextView)findViewById(R.id.txtCodigoTie);
-                tempVal.setText(dataMascota.getString("codigo"));
+                tempVal.setText(dataTienda.getString("codigo"));
 
                 tempVal = (TextView)findViewById(R.id.txtProductoTie);
-                tempVal.setText(dataMascota.getString("Producto"));
+                tempVal.setText(dataTienda.getString("Producto"));
 
                 tempVal = (TextView)findViewById(R.id.txtPrecioTie);
-                tempVal.setText(dataMascota.getString("Precio"));
+                tempVal.setText(dataTienda.getString("Precio"));
 
 
-                id = dataMascota.getString("_id");
-                rev = dataMascota.getString("_rev");
+                id = dataTienda.getString("_id");
+                rev = dataTienda.getString("_rev");
             }
         }catch (Exception ex){
             ///
         }
     }
-    private void mostrarMascota(){
-        Intent mostrarAmigos = new Intent( agregar_entienda.this, MainActivity.class);
-        startActivity(mostrarAmigos);
+    private void mostrarTienda(){
+        Intent mostrarTienda = new Intent( agregar_entienda.this, MainActivity.class);
+        startActivity(mostrarTienda);
     }
 
     private void guardarTie(){
@@ -159,7 +159,7 @@ public class agregar_entienda extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(s);
                 if(jsonObject.getBoolean("ok")){
                     Toast.makeText(getApplicationContext(), "Datos de Tienda guardado con exito", Toast.LENGTH_SHORT).show();
-                    mostrarMascota();
+                    mostrarTienda();
                 } else {
                     Toast.makeText(getApplicationContext(), "Error al intentar guardar datos de Tienda", Toast.LENGTH_SHORT).show();
                 }
