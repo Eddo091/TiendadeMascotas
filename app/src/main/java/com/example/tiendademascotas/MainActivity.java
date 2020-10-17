@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             Bundle enviarParametros = new Bundle();
             enviarParametros.putString( "accion", accion );
-            enviarParametros.putString( "dataAmigo", jsonObject.toString() );
+            enviarParametros.putString( "dataMascota", jsonObject.toString() );
 
             Intent agregarMasco = new Intent( MainActivity.this, agregar_enmascotas.class );
             agregarMasco.putExtras( enviarParametros );
@@ -249,56 +249,8 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "Error al mostrar los datos: " + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-    private class eliminarDatosMascota extends AsyncTask<String,String, String> {
-        HttpURLConnection urlConnection;
 
-        @Override
-        protected String doInBackground(String... parametros) {
-            StringBuilder stringBuilder = new StringBuilder();
-            String jsonResponse = null;
-            try {
-                URL url = new URL( uc.url_mto +
-                        datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "_id" ) + "?rev=" +
-                        datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "_rev" ) );
-
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod( "DELETE" );
-
-                InputStream in = new BufferedInputStream( urlConnection.getInputStream() );
-                BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
-
-                String inputLine;
-                StringBuffer stringBuffer = new StringBuffer();
-                while ((inputLine = reader.readLine()) != null) {
-                    stringBuffer.append( inputLine + "\n" );
-                }
-                if (stringBuffer.length() == 0) {
-                    return null;
-                }
-                jsonResponse = stringBuffer.toString();
-                return jsonResponse;
-            } catch (Exception ex) {
-                //
-            }
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try {
-                JSONObject jsonObject = new JSONObject(s);
-                if (jsonObject.getBoolean("ok")) {
-                    Toast.makeText(getApplicationContext(), "Datos de amigo guardado con exito", Toast.LENGTH_SHORT).show();
-                    conexionservidor objObtenerTMascota = new conexionservidor();
-                    objObtenerTMascota.execute();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error al intentar guardar datos de Mascota", Toast.LENGTH_SHORT).show();
-                }
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), "Error al guardar Mascota: " + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
     }
-}
+
 
 
