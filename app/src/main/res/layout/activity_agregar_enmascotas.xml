@@ -48,15 +48,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="360dp"
         android:text="@string/guardar"
-        android:textSize="24sp" />
+        android:textSize="18sp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMostrarMasc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginRight="20dp"
         android:layout_marginBottom="15dp"
         android:src="@android:drawable/ic_menu_revert"
         app:backgroundTint="#000000"
