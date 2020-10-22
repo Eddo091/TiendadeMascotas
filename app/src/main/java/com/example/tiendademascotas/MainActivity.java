@@ -151,20 +151,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.mnxAgregarMasco:
+            case R.id.mnxAgregarTien:
                 agregarNuevaTienda( "nuevo", jsonObject );
                 return true;
 
-            case R.id.mnxModificarMasco:
+            case R.id.mnxModificarTien:
                 try {
                     agregarNuevaTienda( "modificar", datosJSON.getJSONObject( posicion ) );
                 } catch (Exception ex) {
                 }
                 return true;
 
-            case R.id.mnxEliminarMasco:
+            case R.id.mnxEliminarTien:
 
-                AlertDialog eliminarFriend = eliminarMascota();
+                AlertDialog eliminarFriend = eliminarTien();
                 eliminarFriend.show();
                 return true;
 
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     //eliminar
-        AlertDialog eliminarMascota () {
+        AlertDialog eliminarTien () {
             AlertDialog.Builder confirmacion = new AlertDialog.Builder( MainActivity.this );
             try {
                 confirmacion.setTitle( datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "nombre" ) );
@@ -196,8 +196,8 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             try {
-                                conexionservidor objEliminarAmigo = new conexionservidor();
-                                objEliminarAmigo.execute(uc.url_mto +
+                                conexionservidor objEliminarTien = new conexionservidor();
+                                objEliminarTien.execute(uc.url_mto +
                                         datosJSON.getJSONObject(posicion).getJSONObject("value").getString("_id") + "?rev=" +
                                         datosJSON.getJSONObject(posicion).getJSONObject("value").getString("_rev"), "DELETE");
 
