@@ -25,8 +25,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class agregar_entienda extends AppCompatActivity {
-    String resp, rev;
-    utilidadescomunes uc;
     String accion="nuevo";
     String id ="0";
     ImageView imgFoto;
