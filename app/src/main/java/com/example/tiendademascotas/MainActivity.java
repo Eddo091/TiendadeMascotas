@@ -21,22 +21,14 @@ import androidx.annotation.NonNull;
 //https://developer.android.com/training/camera/photobasics?hl=es-419#java
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+
 import java.util.ArrayList;
 
 
 
 
 public class MainActivity extends AppCompatActivity {
-    utilidadescomunes uc;
-    DetectarmiInternet di;
+
     DB miBD;
     Cursor miTiendaon;
     // JSONArray datosJSON;

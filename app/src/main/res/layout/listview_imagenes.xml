@@ -2,31 +2,39 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
         android:id="@+id/img"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:src="@android:drawable/ic_dialog_info"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="2dp"
-        android:cropToPadding="false"
         android:layout_alignParentTop="true"
-        android:maxHeight="35dp"
-        android:maxWidth="74dp"
-        android:adjustViewBounds="true"
-
-        android:contentDescription="@string/todo"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="4dp" />
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="792dp"
+
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/todo"
+        android:cropToPadding="false"
+        android:maxWidth="74dp"
+        android:maxHeight="35dp"
+        android:src="@android:drawable/ic_dialog_info" />
 
     <TextView
         android:id="@+id/txtTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/descripcion"
-        android:layout_marginTop="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginStart="80dp"
-        android:layout_marginLeft="80dp" />
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="316dp"
+        android:layout_marginRight="316dp"
+        android:layout_marginBottom="815dp"
+        android:text="@string/descripcion" />
 </RelativeLayout>
