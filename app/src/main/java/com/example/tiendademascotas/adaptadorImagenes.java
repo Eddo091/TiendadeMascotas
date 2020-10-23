@@ -1,5 +1,4 @@
 package com.example.tiendademascotas;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,53 +11,52 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class adaptadorImagenes {
-        Context context;
-        ArrayList<Tienda> datos;
-        LayoutInflater layoutInflater;
-        Tienda Tiendaon;
+class adaptadorImagen extends BaseAdapter {
+    Context context;
+    ArrayList<MainActivity.Tiendon> datos;
+    LayoutInflater layoutInflater;
+   MainActivity.Tiendon Tien;
 
-        public adaptadorImagenes(Context context, ArrayList<Tienda> datos) {
-            this.context = context;
-            try {
-                this.datos = datos;
-            } catch (Exception ex) {
-            }
-        }
+    public adaptadorImagen(Context context, ArrayList<MainActivity.Tiendon> datos){
+        this.context = context;
+        try {
+            this.datos=datos;
+        }catch (Exception ex){}
+    }
 
-     /**   @Override
-        public int getCount() {
-            try {
-                return datos.size();
-            } catch (Exception ex) {
-                return 0;
-            }
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
+    @Override
+    public int getCount() {
+        try {
+            return datos.size();
+        }catch (Exception ex) {
             return 0;
         }
+    }
 
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            layoutInflater = (LayoutInflater) context.getSystemService( context.LAYOUT_INFLATER_SERVICE );
-            View itemView = layoutInflater.inflate( R.layout.listview_imagenes, viewGroup, false );
-            TextView textView = (TextView) itemView.findViewById( R.id.txtTitulo );
-            ImageView imageView = (ImageView) itemView.findViewById( R.id.img );
-            try {
-                Tiendaon = datos.get( i );
-                textView.setText( Tiendaon.getNombre() );
-                Bitmap imageBitmap = BitmapFactory.decodeFile( Tiendaon.getUrlImg() );
-                imageView.setImageBitmap( imageBitmap );
-            } catch (Exception ex) {
-            }
-            return itemView; } }**/
+    @Override
+    public Object getItem(int i) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+        layoutInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        View itemView = layoutInflater.inflate(R.layout.listview_imagenes, viewGroup, false);
+        TextView textView = (TextView)itemView.findViewById(R.id.txtTitulo);
+        ImageView imageView = (ImageView)itemView.findViewById(R.id.img);
+        try {
+            Tien = datos.get(i);
+            textView.setText(Tien.getProducto());
+            Bitmap imageBitmap = BitmapFactory.decodeFile(Tien.getUrlImg());
+            imageView.setImageBitmap(imageBitmap);
+        }catch (Exception ex){ }
+        return itemView;
+    }
         }
 
 

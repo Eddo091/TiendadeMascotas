@@ -1,19 +1,28 @@
 package com.example.tiendademascotas;
 
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.view.View;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
 import org.json.JSONObject;
-
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStream;
@@ -26,10 +35,13 @@ import java.net.URL;
 public class agregar_entienda extends AppCompatActivity {
     String resp, accion, id, rev;
     utilidadescomunes uc;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_agregar_entienda );
+
         try {
             FloatingActionButton btnMostrarTienda = findViewById(R.id.btnMostrarTie);
             btnMostrarTienda.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +80,7 @@ public class agregar_entienda extends AppCompatActivity {
 
                 tempVal = (TextView)findViewById(R.id.txtPrecioTie);
                 tempVal.setText(dataTienda.getString("Precio"));
+
 
 
                 id = dataTienda.getString("_id");

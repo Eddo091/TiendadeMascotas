@@ -17,7 +17,9 @@
         android:maxWidth="74dp"
         android:adjustViewBounds="true"
 
-        android:contentDescription="@string/todo" />
+        android:contentDescription="@string/todo"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp" />
 
     <TextView
         android:id="@+id/txtTitulo"
@@ -25,5 +27,6 @@
         android:layout_height="wrap_content"
         android:text="@string/descripcion"
         android:layout_marginTop="20dp"
-        android:layout_marginStart="80dp"/>
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp" />
 </RelativeLayout>

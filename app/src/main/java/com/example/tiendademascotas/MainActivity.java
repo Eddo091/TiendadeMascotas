@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     ListView ltsTienda;
     DB miBD;
     Cursor miTiendaon;
+    Tiendon Tien;
+
+
 /**
  * @Author: USIS017717 VILLEGAS ORTIZ, EDUARDO ISAÍAS
  * @Author: USIS057519 AVILES AVILES, JENNIFER LORENA
@@ -98,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
-               /** adaptadorImagenes adaptadorImg = new adaptadorImagenes( getApplicationContext(), stringArrayList );
-                ltsTienda.setAdapter( adaptadorImg );**/
+                //adaptadorImagen adaptadorImg = new adaptadorImagen( getApplicationContext(), stringArrayList );
+                //ltsTienda.setAdapter( adaptadorImg );
                 stringArrayAdapter.notifyDataSetChanged();
             }
 
@@ -261,10 +264,65 @@ public class MainActivity extends AppCompatActivity {
             }
             stringArrayAdapter.notifyDataSetChanged();
             registerForContextMenu( ltsTienda );
-          /**  adaptadorImagenes adaptadorImg = new adaptadorImagenes( getApplicationContext(), stringArrayList );
-            ltsTienda.setAdapter(adaptadorImg);**/
+          //  adaptadorImagen adaptadorImg = new adaptadorImagen( getApplicationContext(), stringArrayList );
+           // ltsTienda.setAdapter(adaptadorImg);
         } catch (Exception ex) {
             Toast.makeText( MainActivity.this, "Error al mostrar los datos: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
+        }
+    }
+    public class  Tiendon {
+        String id;
+        String codigo;
+        String producto;
+        String precio;
+        String urlImg;
+
+        public void tiendaon (String id, String codigo, String producto, String precio, String urlImg) {
+            this.id = id;
+            this.codigo = codigo;
+            this.producto = producto;
+            this.precio = precio;
+            this.urlImg = urlImg;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getCodigo() {
+            return codigo;
+        }
+
+        public void setCodigo(String Codigo) {
+            this.codigo = Codigo;
+        }
+
+        public String getProducto() {
+            return producto;
+        }
+
+        public void setProducto(String producto) {
+            this.producto = producto;
+        }
+
+        public String getPrecio() {
+            return precio;
+        }
+
+        public void setPrecio(String Precio) {
+            this.precio = Precio;
+        }
+
+        public String getUrlImg() {
+            return urlImg;
+        }
+
+        public void setUrlImg(String urlImg) {
+            this.urlImg = urlImg;
         }
     }
 
