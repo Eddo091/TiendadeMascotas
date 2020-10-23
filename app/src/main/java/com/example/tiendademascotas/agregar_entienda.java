@@ -1,6 +1,8 @@
 package com.example.tiendademascotas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,177 +10,155 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.view.View;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
+import java.security.Guard;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 public class agregar_entienda extends AppCompatActivity {
-    String resp, accion, id, rev;
+    String resp, rev;
     utilidadescomunes uc;
-
+    String accion="nuevo";
+    String id ="0";
+    ImageView imgFoto;
+    String urlCompletaImg;
+    Intent takePictureIntent;
+    Button btnTienda;
+    DB Tiendita;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_agregar_entienda );
-
-        try {
-            FloatingActionButton btnMostrarTienda = findViewById(R.id.btnMostrarTie);
-            btnMostrarTienda.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mostrarTienda();
-                }
-            });
-            Button btnGuardarTie = findViewById( R.id.btnMostrarTie );
-            btnGuardarTie.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    guardarTie();
-                }
-            } );
-            mostrarDatosTienda();
-        } catch (Exception ex){
-            Toast.makeText(getApplicationContext(), "Error al agregar en Tienda Online: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-
+        imgFoto = findViewById(R.id.imgFoto);
+        btnTienda = findViewById(R.id.btnAgregarProductoTie);
+        btnTienda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mostrarTienda();
+            }
+        });
+        GuardaDatosT();
+        muestraDatosT();
+        FotoTienda();
 
     }
+    private void mostrarTienda() {
+        Intent mostrarTienda = new Intent(agregar_entienda.this, MainActivity.class);
+        startActivity(mostrarTienda);
+    }
 
-    void mostrarDatosTienda(){
+    private void muestraDatosT() {
         try {
             Bundle recibirParametros = getIntent().getExtras();
             accion = recibirParametros.getString("accion");
             if (accion.equals("modificar")){
-                JSONObject dataTienda = new JSONObject(recibirParametros.getString("dataTienda")).getJSONObject("value");
+                String[] data = recibirParametros.getStringArray("dataAmigo");
+
+                id = data[0];
 
                 TextView tempVal = (TextView)findViewById(R.id.txtCodigoTie);
-                tempVal.setText(dataTienda.getString("codigo"));
+                tempVal.setText(data[1]);
 
                 tempVal = (TextView)findViewById(R.id.txtProductoTie);
-                tempVal.setText(dataTienda.getString("Producto"));
+                tempVal.setText(data[2]);
 
                 tempVal = (TextView)findViewById(R.id.txtPrecioTie);
-                tempVal.setText(dataTienda.getString("Precio"));
+                tempVal.setText(data[3]);
 
-
-
-                id = dataTienda.getString("_id");
-                rev = dataTienda.getString("_rev");
+                urlCompletaImg = data[4];
+                Bitmap imageBitmap = BitmapFactory.decodeFile(urlCompletaImg);
+                imgFoto.setImageBitmap(imageBitmap);
             }
         }catch (Exception ex){
             ///
         }
     }
-    private void mostrarTienda(){
-        Intent mostrarTienda = new Intent( agregar_entienda.this, MainActivity.class);
-        startActivity(mostrarTienda);
+    private void GuardaDatosT() {
+        btnTienda = findViewById(R.id.btnAgregarProductoTie);
+        btnTienda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TextView tempVal = findViewById(R.id.txtCodigoTie);
+                String codigo= tempVal.getText().toString();
+
+                tempVal = findViewById(R.id.txtProductoTie);
+                String producto = tempVal.getText().toString();
+
+                tempVal = findViewById(R.id.txtPrecioTie);
+                String precio = tempVal.getText().toString();
+
+                String[] data = {id,codigo, producto,precio,urlCompletaImg};
+
+                Tiendita = new DB(getApplicationContext(),"", null, 1);
+                Tiendita.mantenimientoTiendaon(accion, data);
+
+                Toast.makeText(getApplicationContext(),"REGISTRO HECHO", Toast.LENGTH_LONG).show();
+                muestraDatosT();
+            }
+        });
+    }
+    private void FotoTienda() {
+        imgFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    //guardando la imagen
+                    File photoFile = null;
+                    try {
+                        photoFile =CreaImagen();
+                    }catch (Exception ex){}
+                    if (photoFile != null) {
+                        try {
+                            Uri photoURI = FileProvider.getUriForFile(agregar_entienda.this, "steph.rs.controlesbasicos.fileprovider", photoFile);
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(takePictureIntent, 1);
+                        }catch (Exception ex){
+                            Toast.makeText(getApplicationContext(), "Error Toma Foto: "+ ex.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }
+        });
+    }
+    private File CreaImagen() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "imagen_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        if( storageDir.exists()==false ){
+            storageDir.mkdirs();
+        }
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+        // Save a file: path for use with ACTION_VIEW intents
+        urlCompletaImg = image.getAbsolutePath();
+        return image;
     }
 
-    private void guardarTie(){
-        TextView tempVal = findViewById(R.id.txtCodigoTie);
-        String codigoprod = tempVal.getText().toString();
-
-        tempVal = findViewById(R.id.txtProductoTie);
-        String nombre = tempVal.getText().toString();
-
-        tempVal = findViewById(R.id.txtPrecioTie);
-        String precio = tempVal.getText().toString();
-
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
         try {
-            JSONObject datosTie = new JSONObject();
-            datosTie.put("Codigo", codigoprod);
-            datosTie.put("Producto", nombre);
-            datosTie.put("Precio", precio);
-            enviarDatosTie objGuardarTie = new enviarDatosTie();
-            objGuardarTie.execute(datosTie.toString());
-
+            if (requestCode == 1 && resultCode == RESULT_OK) {
+                Bitmap imageBitmap = BitmapFactory.decodeFile(urlCompletaImg);
+                imgFoto.setImageBitmap(imageBitmap);
+            }
         }catch (Exception ex){
             Toast.makeText(getApplicationContext(), "Error: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
-    private class enviarDatosTie extends AsyncTask<String,String, String> {
-        HttpURLConnection urlConnection;
-        @Override
-        protected String doInBackground(String... parametros) {
-            StringBuilder stringBuilder = new StringBuilder();
-            String jsonResponse = null;
-            String jsonDatos = parametros[0];
-            BufferedReader reader;
-            try {
-                URL url = new URL(uc.url_mto);
-                urlConnection = (HttpURLConnection)url.openConnection();
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
-
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type","application/json");
-                urlConnection.setRequestProperty("Accept","application/json");
-
-                Writer writer = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
-                writer.write(jsonDatos);
-                writer.close();
-
-                InputStream inputStream = urlConnection.getInputStream();
-                if(inputStream==null){
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                resp = reader.toString();
-
-                String inputLine;
-                StringBuffer stringBuffer = new StringBuffer();
-                while ((inputLine=reader.readLine())!= null){
-                    stringBuffer.append(inputLine+"\n");
-                }
-                if(stringBuffer.length()==0){
-                    return null;
-                }
-                jsonResponse = stringBuffer.toString();
-                return jsonResponse;
-            }catch (Exception ex){
-                //
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try{
-                JSONObject jsonObject = new JSONObject(s);
-                if(jsonObject.getBoolean("ok")){
-                    Toast.makeText(getApplicationContext(), "Datos de Tienda guardado con exito", Toast.LENGTH_SHORT).show();
-                    mostrarTienda();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error al intentar guardar datos de Tienda", Toast.LENGTH_SHORT).show();
-                }
-            }catch (Exception e){
-                Toast.makeText(getApplicationContext(), "Error al guardar Tienda: "+e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
     }
-}

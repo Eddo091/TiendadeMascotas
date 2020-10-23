@@ -10,14 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
-class adaptadorImagen extends BaseAdapter {
+public class ImagenAdaptador extends BaseAdapter {
     Context context;
-    ArrayList<MainActivity.Tiendon> datos;
+    ArrayList<Tiendon> datos;
     LayoutInflater layoutInflater;
-   MainActivity.Tiendon Tien;
+    Tiendon Tienda;
 
-    public adaptadorImagen(Context context, ArrayList<MainActivity.Tiendon> datos){
+    public ImagenAdaptador(Context context, ArrayList<Tiendon> datos){
         this.context = context;
         try {
             this.datos=datos;
@@ -50,13 +49,13 @@ class adaptadorImagen extends BaseAdapter {
         TextView textView = (TextView)itemView.findViewById(R.id.txtTitulo);
         ImageView imageView = (ImageView)itemView.findViewById(R.id.img);
         try {
-            Tien = datos.get(i);
-            textView.setText(Tien.getProducto());
-            Bitmap imageBitmap = BitmapFactory.decodeFile(Tien.getUrlImg());
+            Tienda= datos.get(i);
+            textView.setText(Tienda.getProducto());
+            Bitmap imageBitmap = BitmapFactory.decodeFile(Tienda.getUrlImg());
             imageView.setImageBitmap(imageBitmap);
         }catch (Exception ex){ }
         return itemView;
     }
-        }
 
 
+}
