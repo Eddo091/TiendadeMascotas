@@ -55,7 +55,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginTop="290dp"
         android:layout_marginBottom="524dp"
-        android:hint="@string/marca"
+        android:hint="@string/precio"
         android:importantForAutofill="no"
         android:inputType="text"
         android:textSize="14sp" />

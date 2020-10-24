@@ -3,10 +3,12 @@
     <string name="buscar">Buscar</string>
     <string name="nombre">NOMBRE</string>
     <string name="cod_producto">COD PRODUCTO</string>
-    <string name="marca">MARCA</string>
     <string name="precio">PRECIO</string>
     <string name="guardar">Guardar</string>
     <string name="descripcion">Descripcion...</string>
     <string name="todo">TODO</string>
+    <string name="nuevo">Nuevo</string>
+    <string name="modificar">Modificar</string>
+    <string name="eliminar">Eliminar</string>
 
 </resources>

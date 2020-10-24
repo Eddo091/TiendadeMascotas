@@ -131,8 +131,7 @@ public class agregar_entienda extends AppCompatActivity {
     }
     private File CreaImagen() throws IOException {
         // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "imagen_" + timeStamp + "_";
+        String imageFileName = "imagen_" + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if( storageDir.exists()==false ){
             storageDir.mkdirs();

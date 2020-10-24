@@ -44,7 +44,7 @@ public class ImagenAdaptador extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        layoutInflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
+        layoutInflater = (LayoutInflater)context.getSystemService( Context.LAYOUT_INFLATER_SERVICE );
         View itemView = layoutInflater.inflate(R.layout.listview_imagenes, viewGroup, false);
         TextView textView = (TextView)itemView.findViewById(R.id.txtTitulo);
         ImageView imageView = (ImageView)itemView.findViewById(R.id.img);
