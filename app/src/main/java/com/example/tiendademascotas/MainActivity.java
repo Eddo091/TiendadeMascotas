@@ -31,9 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
     DB miBD;
     Cursor miTiendaon;
-    // JSONArray datosJSON;
-   // JSONObject jsonObject;
-    Integer posicion;
     Tiendon Tien;
     ArrayList<Tiendon> StringArrayList = new ArrayList<Tiendon>();
     ArrayList<Tiendon> copyStringArrayList = new ArrayList<Tiendon>();
@@ -60,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 agregarTienda("nuevo", new String[]{});
             }
         });
-        obbtenerDatos();
+        obtenerDatosTien();
         buscar();
     }
 
@@ -146,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 miBD.mantenimientoTiendaon("eliminar",new String[]{miTiendaon.getString(0)});
-                obbtenerDatos();
+                obtenerDatosTien();
                 Toast.makeText(getApplicationContext(), "PRODUCTO ELIMINADO CON EXITO",Toast.LENGTH_SHORT).show();
                 dialogInterface.dismiss();
             }
@@ -161,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         return confirmacion.create();
     }
 
-    void obbtenerDatos() {
+    void obtenerDatosTien() {
         miBD = new DB (getApplicationContext(), "", null, 1);
         miTiendaon = miBD.mantenimientoTiendaon("consultar", null);
         if( miTiendaon.moveToFirst() ){ //hay registro en la BD que mostrar
@@ -247,7 +244,7 @@ class Tiendon {
     public String getUrlImg() {
         return urlImg;
     }
-    public void setUrlImg(String urlImg) {
+    public void SetUrlImg(String urlImg) {
         this.urlImg = urlImg;
     }
 }
