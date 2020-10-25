@@ -61,7 +61,7 @@ public class agregar_entienda extends AppCompatActivity {
                 JSONObject dataTienda = new JSONObject(recibirParametros.getString("dataTienda")).getJSONObject("value");
 
                 TextView tempVal = (TextView)findViewById(R.id.txtCodigoTie);
-                tempVal.setText(dataTienda.getString("codigo"));
+                tempVal.setText(dataTienda.getString("Codigo"));
 
                 tempVal = (TextView)findViewById(R.id.txtProductoTie);
                 tempVal.setText(dataTienda.getString("Producto"));

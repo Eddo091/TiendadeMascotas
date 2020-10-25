@@ -29,17 +29,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="180dp"
-        android:hint="@string/marca"
-        android:inputType="text"
-        android:importantForAutofill="no" />
+        android:hint="@string/precio"
+        android:importantForAutofill="no"
+        android:inputType="text" />
 
     <Button
         android:id="@+id/btnGuardarTie"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="360dp"
+        android:layout_marginLeft="200dp"
         android:text="@string/guardar"
-        android:textSize="24sp" />
+        android:textSize="18sp"
+        android:layout_marginStart="200dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMostrarTie"

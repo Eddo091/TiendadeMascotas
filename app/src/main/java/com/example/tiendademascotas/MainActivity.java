@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
             posicion = adapterContextMenuInfo.position;
-            menu.setHeaderTitle( datosJSON.getJSONObject( posicion ).getString( "nombre" ) );
+            menu.setHeaderTitle( datosJSON.getJSONObject( posicion ).getString( "Producto" ) );
         } catch (Exception ex) {
 
         }
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog eliminarTien () {
             AlertDialog.Builder confirmacion = new AlertDialog.Builder( MainActivity.this );
             try {
-                confirmacion.setTitle( datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "nombre" ) );
+                confirmacion.setTitle( datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "Producto" ) );
                 confirmacion.setMessage( "Esta seguro de eliminar el registro?" );
                 confirmacion.setPositiveButton( "Si", new DialogInterface.OnClickListener() {
                         @Override
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
                 }catch (Exception ex){
-                    Toast.makeText(getApplicationContext(), "Error al mostrar la confoirmacion: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Error al mostrar la confirmacion: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
                 return confirmacion.create();
@@ -233,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
             final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>( MainActivity.this, android.R.layout.simple_list_item_1, arrayList );
             ltsTienda.setAdapter( stringArrayAdapter );
             for (int i = 0; i < datosJSON.length(); i++) {
-                stringArrayAdapter.add( datosJSON.getJSONObject( i ).getJSONObject( "value" ).getString( "nombre" ) );
+                stringArrayAdapter.add( datosJSON.getJSONObject( i ).getJSONObject( "value" ).getString( "Producto" ) );
             }
             stringArrayAdapter.notifyDataSetChanged();
             registerForContextMenu( ltsTienda );
