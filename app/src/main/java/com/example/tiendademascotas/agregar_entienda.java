@@ -50,7 +50,7 @@ public class agregar_entienda extends AppCompatActivity {
         FotoTienda();
 
     }
-    private void mostrarTienda() {
+ void mostrarTienda() {
         Intent mostrarTienda = new Intent(agregar_entienda.this, MainActivity.class);
         startActivity(mostrarTienda);
     }
@@ -81,7 +81,7 @@ public class agregar_entienda extends AppCompatActivity {
             ///
         }
     }
-    private void GuardaDatosT() {
+   void GuardaDatosT() {
         btnTienda = findViewById(R.id.btnAgregarProductoTie);
         btnTienda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,7 +105,7 @@ public class agregar_entienda extends AppCompatActivity {
             }
         });
     }
-    private void FotoTienda() {
+ void FotoTienda() {
         imgFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

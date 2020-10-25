@@ -53,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
 
-        FloatingActionButton btnAgregar =(FloatingActionButton)findViewById(R.id.btnAgregarProductoTie);
+        FloatingActionButton btnAgregar = findViewById(R.id.btnAgregarProductoTie);
         btnAgregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                agregar("nuevo", new String[]{});
+                agregarTienda("nuevo", new String[]{});
             }
         });
         obbtenerDatos();
@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mnxAgregarTien:
-                agregar("nuevo", new String[]{});
+                agregarTienda("nuevo", new String[]{});
                 return true;
 
             case R.id.mnxModificarTien:
@@ -125,11 +125,11 @@ public class MainActivity extends AppCompatActivity {
                         miTiendaon.getString(4)//urlImg
                          //
                 };
-                agregar("modificar",dataTien);
+                agregarTienda("modificar",dataTien);
                 return true;
 
             case R.id.mnxEliminarTien:
-                android.app.AlertDialog eliminar =  eliminarProducto();
+                android.app.AlertDialog eliminar =  eliminarTien();
                 eliminar.show();
                 return true;
 
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    android.app.AlertDialog eliminarProducto() {
+    android.app.AlertDialog eliminarTien() {
         android.app.AlertDialog.Builder confirmacion = new android.app.AlertDialog.Builder(MainActivity.this);
         confirmacion.setTitle(miTiendaon.getString(1));
         confirmacion.setMessage("ESTA SEGURO DE ELIMINAR ESTE PRODUCTO?");
@@ -168,28 +168,28 @@ public class MainActivity extends AppCompatActivity {
             mostrarDatosTien();
         } else{ //No tengo registro que mostrar.
             Toast.makeText(getApplicationContext(), "NO HAY REGISTROS QUE MOSTRAR",Toast.LENGTH_LONG).show();
-            agregar("nuevo",    new String[]{});
+            agregarTienda("nuevo",    new String[]{});
         }
     }
 
     void mostrarDatosTien() {
        StringArrayList.clear();
-        ltsTienda = (ListView)findViewById(R.id.ltsTiendaCouchDB);
+       ltsTienda = (ListView)findViewById(R.id.ltsTiendaCouchDB);
         do {
             Tien = new Tiendon(miTiendaon.getString(0),miTiendaon.getString(1), miTiendaon.getString(2), miTiendaon.getString(3), miTiendaon.getString(4));
             StringArrayList.add(Tien);
         }while(miTiendaon.moveToNext());
         ImagenAdaptador adaptadorImg = new ImagenAdaptador ( getApplicationContext(), StringArrayList);
-        ltsTienda.setAdapter(adaptadorImg);
+       ltsTienda.setAdapter(adaptadorImg);
 
         copyStringArrayList.clear();//limpiamos
         copyStringArrayList.addAll(StringArrayList);//creamos la copia
-        registerForContextMenu(ltsTienda);
+             registerForContextMenu(ltsTienda);
     }
-    void agregar(String accion, String[] dataProducto) {
+    void agregarTienda(String accion, String[] dataTienda) {
         Bundle enviarParametros = new Bundle();
         enviarParametros.putString("accion",accion);
-        enviarParametros.putStringArray("data",dataProducto);
+        enviarParametros.putStringArray("data",dataTienda);
         Intent agregarProducto = new Intent(MainActivity.this, agregar_entienda.class);
         agregarProducto.putExtras(enviarParametros);
         startActivity(agregarProducto);
@@ -213,8 +213,10 @@ class Tiendon {
     }
 
     public String getId() {
+
         return id;
     }
+
     public void setId(String id)    {
         this.id = id;
     }
