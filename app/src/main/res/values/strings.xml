@@ -6,9 +6,9 @@
     <string name="precio">PRECIO</string>
     <string name="guardar">Guardar</string>
     <string name="descripcion">Descripcion...</string>
-    <string name="todo">TODO</string>
     <string name="nuevo">Nuevo</string>
     <string name="modificar">Modificar</string>
     <string name="eliminar">Eliminar</string>
+    <string name="todo">TODO</string>
 
 </resources>

@@ -15,8 +15,10 @@
 
         <ImageView
             android:id="@+id/imgFoto"
-            android:layout_width="470dp"
-            android:layout_height="139dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="195dp"
+            android:layout_marginTop="20dp"
             android:contentDescription="@string/todo" />
 
     </LinearLayout>
