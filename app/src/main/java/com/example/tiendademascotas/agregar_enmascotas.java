@@ -60,16 +60,16 @@ public class agregar_enmascotas extends AppCompatActivity {
                 JSONObject dataMascota = new JSONObject(recibirParametros.getString("dataMascota")).getJSONObject("value");
 
                 TextView tempVal = (TextView)findViewById(R.id.txtCodigoMasc);
-                tempVal.setText(dataMascota.getString("codigo"));
+                tempVal.setText(dataMascota.getString("Codigo Producto"));
 
                 tempVal = (TextView)findViewById(R.id.txtNombreMasc);
-                tempVal.setText(dataMascota.getString("nombre"));
+                tempVal.setText(dataMascota.getString("Nombre"));
 
                 tempVal = (TextView)findViewById(R.id.txtMarcaMasc);
-                tempVal.setText(dataMascota.getString("direccion"));
+                tempVal.setText(dataMascota.getString("Marca"));
 
                 tempVal = (TextView)findViewById(R.id.txtPrecioMasc);
-                tempVal.setText(dataMascota.getString("telefono"));
+                tempVal.setText(dataMascota.getString("Precio"));
 
                 id = dataMascota.getString("_id");
                 rev = dataMascota.getString("_rev");

@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             AdapterView.AdapterContextMenuInfo adapterContextMenuInfo = (AdapterView.AdapterContextMenuInfo) menuInfo;
             posicion = adapterContextMenuInfo.position;
-            menu.setHeaderTitle( datosJSON.getJSONObject( posicion ).getString( "nombre" ) );
+            menu.setHeaderTitle( datosJSON.getJSONObject( posicion ).getString( "Nombre" ) );
         } catch (Exception ex) {
 
         }
@@ -198,14 +198,14 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog eliminarMascota () {
             AlertDialog.Builder confirmacion = new AlertDialog.Builder( MainActivity.this );
             try {
-                confirmacion.setTitle( datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "nombre" ) );
+                confirmacion.setTitle( datosJSON.getJSONObject( posicion ).getJSONObject( "value" ).getString( "Nombre" ) );
                 confirmacion.setMessage( "Esta seguro de eliminar el registro?" );
                 confirmacion.setPositiveButton( "Si", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             try {
-                                conexionservidor objEliminarAmigo = new conexionservidor();
-                                objEliminarAmigo.execute(uc.url_mto +
+                                conexionservidor objEliminarMas = new conexionservidor();
+                                objEliminarMas.execute(uc.url_mto +
                                         datosJSON.getJSONObject(posicion).getJSONObject("value").getString("_id") + "?rev=" +
                                         datosJSON.getJSONObject(posicion).getJSONObject("value").getString("_rev"), "DELETE");
 
@@ -213,7 +213,9 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Error al intentar eliminar en mascota: "+ ex.getMessage() , Toast.LENGTH_LONG).show();
                             }
                             dialogInterface.dismiss();
+
                         }
+
                     });
 
             confirmacion.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -221,10 +223,11 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Toast.makeText( getApplicationContext(), "Eliminacion cancelada por el usuario.", Toast.LENGTH_SHORT ).show();
                     dialogInterface.dismiss();
+
                 }
             });
                 }catch (Exception ex){
-                    Toast.makeText(getApplicationContext(), "Error al mostrar la confoirmacion: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Error al mostrar la confirmacion: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
                 }
 
                 return confirmacion.create();
@@ -241,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
             final ArrayAdapter<String> stringArrayAdapter = new ArrayAdapter<>( MainActivity.this, android.R.layout.simple_list_item_1, arrayList );
             ltsMascotas.setAdapter( stringArrayAdapter );
             for (int i = 0; i < datosJSON.length(); i++) {
-                stringArrayAdapter.add( datosJSON.getJSONObject( i ).getJSONObject( "value" ).getString( "nombre" ) );
+                stringArrayAdapter.add( datosJSON.getJSONObject( i ).getJSONObject( "value" ).getString( "Nombre" ) );
             }
             stringArrayAdapter.notifyDataSetChanged();
             registerForContextMenu( ltsMascotas );
