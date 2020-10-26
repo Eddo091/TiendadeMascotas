@@ -1,9 +1,11 @@
 package com.example.tiendademascotas;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         di = new DetectarmiInternet(getApplicationContext());
         //Si hay conección
+
         if (di.HayConexcionaInternet()) {
             conexionservidor objTiendaa = new conexionservidor();
             objTiendaa.execute( uc.url_consulta, "GET" );
@@ -67,7 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     void buscarTienda(){
-        final TextView tempVal = (TextView)findViewById(R.id.txtBuscarProductoTienda);
+        try {
+        final TextView tempVal = findViewById(R.id.txtBuscarProductoTienda);
         tempVal.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -92,7 +96,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    } catch (Exception ex) {
+            Toast.makeText(MainActivity.this, "Error al busacar datos: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+
+        }
     }
+
 
     private class conexionservidor extends AsyncTask<String, String, String>{
         HttpURLConnection urlConnection;
@@ -120,12 +129,24 @@ public class MainActivity extends AppCompatActivity {
             return result.toString();
         }
         //onpost
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute( s );
             try{
                 jsonObject = new JSONObject(s);
-                datosJSON = jsonObject.getJSONArray("rows");
+                if(jsonObject.isNull("rows")){
+                    if(jsonObject.getBoolean("ok")){
+                        Toast.makeText(MainActivity.this, "Producto en Tienda eliminado con exito", Toast.LENGTH_SHORT).show();
+                        datosJSON.remove(posicion);
+                    } else{
+                        Toast.makeText(MainActivity.this, "Error no se pudo eliminar el registro de Tienda", Toast.LENGTH_SHORT).show();
+                    }
+                } else{
+                    datosJSON = jsonObject.getJSONArray("rows");
+                }
+
+
                 mostrarDatosTienda();
             }catch (Exception ex){
                 Toast.makeText(MainActivity.this, "Error la parsear los datos: " + ex.getMessage(), Toast.LENGTH_LONG).show();

@@ -35,14 +35,13 @@ import java.net.URL;
 public class agregar_entienda extends AppCompatActivity {
     String resp, accion, id, rev;
     utilidadescomunes uc;
-    ImageView imgFoto;
-    String urlCompletaImg;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_agregar_entienda );
-        imgFoto = findViewById(R.id.imgFoto);
+
         try {
             FloatingActionButton btnMostrarTienda = findViewById(R.id.btnMostrarTie);
             btnMostrarTienda.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +50,7 @@ public class agregar_entienda extends AppCompatActivity {
                     mostrarTienda();
                 }
             });
-            Button btnGuardarTie = findViewById( R.id.btnMostrarTie );
+            Button btnGuardarTie = findViewById( R.id.btnGuardarTie );
             btnGuardarTie.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -90,8 +89,7 @@ public class agregar_entienda extends AppCompatActivity {
 
                 id = dataTienda.getString("_id");
                 rev = dataTienda.getString("_rev");
-                Bitmap imageBitmap = BitmapFactory.decodeFile(urlCompletaImg);
-                imgFoto.setImageBitmap(imageBitmap);
+
             }
 
 
@@ -115,7 +113,7 @@ public class agregar_entienda extends AppCompatActivity {
 
         tempVal = findViewById(R.id.txtPrecioTie);
         String precio = tempVal.getText().toString();
-        String[] data= {urlCompletaImg};
+
 
 
         try {
