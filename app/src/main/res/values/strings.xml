@@ -6,4 +6,6 @@
     <string name="marca">MARCA</string>
     <string name="precio">PRECIO</string>
     <string name="guardar">Guardar</string>
+    <string name="todo">TODO</string>
+    <string name="descripcion">descripcion</string>
 </resources>

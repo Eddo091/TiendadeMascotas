@@ -1,12 +1,19 @@
 package com.example.tiendademascotas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +23,8 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -26,10 +35,14 @@ import java.net.URL;
 public class agregar_entienda extends AppCompatActivity {
     String resp, accion, id, rev;
     utilidadescomunes uc;
+    ImageView imgFoto;
+    String urlCompletaImg;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_agregar_entienda );
+        imgFoto = findViewById(R.id.imgFoto);
         try {
             FloatingActionButton btnMostrarTienda = findViewById(R.id.btnMostrarTie);
             btnMostrarTienda.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +63,10 @@ public class agregar_entienda extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Error al agregar en Tienda Online: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
         }
 
+/**
+ * @Author: USIS017717 VILLEGAS ORTIZ, EDUARDO ISAÍAS
+ * @Author: USIS057519 AVILES AVILES, JENNIFER LORENA
+ * **/
 
     }
 
@@ -57,6 +74,7 @@ public class agregar_entienda extends AppCompatActivity {
         try {
             Bundle recibirParametros = getIntent().getExtras();
             accion = recibirParametros.getString("accion");
+            
             if (accion.equals("modificar")){
                 JSONObject dataTienda = new JSONObject(recibirParametros.getString("dataTienda")).getJSONObject("value");
 
@@ -72,10 +90,16 @@ public class agregar_entienda extends AppCompatActivity {
 
                 id = dataTienda.getString("_id");
                 rev = dataTienda.getString("_rev");
+                Bitmap imageBitmap = BitmapFactory.decodeFile(urlCompletaImg);
+                imgFoto.setImageBitmap(imageBitmap);
             }
+
+
         }catch (Exception ex){
             ///
         }
+
+
     }
     private void mostrarTienda(){
         Intent mostrarTienda = new Intent( agregar_entienda.this, MainActivity.class);
@@ -91,7 +115,7 @@ public class agregar_entienda extends AppCompatActivity {
 
         tempVal = findViewById(R.id.txtPrecioTie);
         String precio = tempVal.getText().toString();
-
+        String[] data= {urlCompletaImg};
 
 
         try {

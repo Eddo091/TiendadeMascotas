@@ -79,9 +79,9 @@ public class MainActivity extends AppCompatActivity {
                 if( tempVal.getText().toString().trim().length()<1 ){//no hay texto para buscar
                     arrayList.addAll(copyStringArrayList);
                 } else{//hacemos la busqueda
-                    for (String mascota : copyStringArrayList){
-                        if(mascota.toLowerCase().contains(tempVal.getText().toString().trim().toLowerCase())){
-                            arrayList.add(mascota);
+                    for (String tienda : copyStringArrayList){
+                        if(tienda.toLowerCase().contains(tempVal.getText().toString().trim().toLowerCase())){
+                            arrayList.add(tienda);
                         }
                     }
                 }
