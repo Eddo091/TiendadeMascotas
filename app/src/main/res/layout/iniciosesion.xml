@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:contentDescription="@string/todo">
 
+
     <ImageView
         android:id="@+id/imgFoto"
         android:layout_width="129dp"
