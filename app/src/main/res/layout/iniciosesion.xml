@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:contentDescription="@string/todo">
+
+    <ImageView
+        android:id="@+id/imgFoto"
+        android:layout_width="129dp"
+        android:layout_height="125dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="85dp"
+        android:contentDescription="@string/foto"
+        android:src="@drawable/camara" />
+
+    <EditText
+        android:id="@+id/txtSesionnombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgFoto"
+        android:layout_marginTop="68dp"
+        android:hint="@string/usuario"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/BtnGuardaRegistro"
+        android:background="@drawable/save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtSesionnombre"
+        android:layout_marginTop="60dp"
+        android:layout_centerHorizontal="true"/>
+</RelativeLayout>

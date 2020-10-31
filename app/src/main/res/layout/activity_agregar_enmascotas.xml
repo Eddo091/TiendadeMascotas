@@ -59,5 +59,7 @@
         android:src="@android:drawable/ic_menu_revert"
         app:backgroundTint="#000000"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp" />
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp" />
 </RelativeLayout>

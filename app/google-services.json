@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "655673396894",
+    "firebase_url": "https://tiendamascotas-1d595.firebaseio.com",
+    "project_id": "tiendamascotas-1d595",
+    "storage_bucket": "tiendamascotas-1d595.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:655673396894:android:2139fa23c95cb2decff58f",
+        "android_client_info": {
+          "package_name": "com.example.tiendademascotas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "655673396894-c2qrudg2u3oh944idedh8gvdpuojvjfl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOOK_-zJAWik5bThDpWnJhhDFcWMgYjvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "655673396894-c2qrudg2u3oh944idedh8gvdpuojvjfl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
