@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No hay conexion a internet.", Toast.LENGTH_LONG).show();
         }
 
+
         FloatingActionButton btnAgregarNuevaMasc = findViewById( R.id.btnAgregarProductoMas );
         btnAgregarNuevaMasc.setOnClickListener( new View.OnClickListener() {
             @Override
