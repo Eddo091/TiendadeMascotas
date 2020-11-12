@@ -30,6 +30,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".agregar_enmascotas"></activity>
+        <service android:name=".MyFirebaseInstanceIdServices"/>
+        <intent-filter>
+            <action android:name= "com.google.firebase.INSTANCE_ID_EVENT"/>
+        </intent-filter>
     </application>
 
 </manifest>
