@@ -2,23 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="@string/todo">
+    android:contentDescription="@string/todo"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/crvFoto"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="150dp">
 
 
     <ImageView
         android:id="@+id/imgFoto"
         android:layout_width="129dp"
         android:layout_height="125dp"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="85dp"
         android:contentDescription="@string/foto"
         android:src="@drawable/camara" />
-
+    </androidx.cardview.widget.CardView>
     <EditText
         android:id="@+id/txtSesionnombre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imgFoto"
+        android:layout_below="@id/crvFoto"
         android:layout_marginTop="68dp"
         android:hint="@string/usuario"
         android:importantForAutofill="no"
@@ -33,4 +42,5 @@
         android:layout_below="@id/txtSesionnombre"
         android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"/>
+
 </RelativeLayout>

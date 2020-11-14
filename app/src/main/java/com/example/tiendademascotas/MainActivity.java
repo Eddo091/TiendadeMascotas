@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.iniciosesion );
+        imgfoto=findViewById(R.id.imgFoto);
         tomarFoto();
         try {
             //Llamar al token
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
                         String nombre = tempval.getText().toString(),
                                 id = mibd.push().getKey();
-                        Usuarios user = new Usuarios( nombre, "pruebacorreo@gmail.com", "", Mitoken );
+                        Usuarios user = new Usuarios( nombre, "pruebacorreo@gmail.com", urlCompletaImg, Mitoken );
 
                         if (id != null) {
                             mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
