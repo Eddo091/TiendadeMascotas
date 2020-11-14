@@ -34,13 +34,37 @@
         android:inputType="text"
         android:textSize="24sp" />
 
+    <EditText
+        android:id="@+id/txtcorreo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtSesionnombre"
+        android:layout_marginTop="3dp"
+        android:hint="@string/email"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/txtcontra"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtcorreo"
+        android:layout_marginTop="3dp"
+        android:hint="@string/contrase_a"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:textSize="24sp" />
+
     <Button
         android:id="@+id/BtnGuardaRegistro"
         android:background="@drawable/save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtSesionnombre"
+        android:layout_below="@id/txtcontra"
         android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"/>
+
+
 
 </RelativeLayout>

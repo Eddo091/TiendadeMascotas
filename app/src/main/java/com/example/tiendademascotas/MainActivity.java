@@ -59,10 +59,13 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
                         TextView tempval = findViewById( R.id.txtSesionnombre );
-
+                        TextView tempval2 = findViewById( R.id.txtcorreo );
+                        TextView tempval3 = findViewById( R.id.txtcontra );
+                        String email = tempval2.getText().toString();
+                        String contra = tempval3.getText().toString();
                         String nombre = tempval.getText().toString(),
                                 id = mibd.push().getKey();
-                        Usuarios user = new Usuarios( nombre, "pruebacorreo@gmail.com", urlCompletaImg, Mitoken );
+                        Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, Mitoken );
 
                         if (id != null) {
                             mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {

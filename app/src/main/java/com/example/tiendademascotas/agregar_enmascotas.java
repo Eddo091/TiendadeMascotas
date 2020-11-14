@@ -1,5 +1,6 @@
 package com.example.tiendademascotas;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -7,10 +8,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONObject;
 
@@ -22,26 +31,35 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class agregar_enmascotas extends AppCompatActivity {
-    String resp, accion, id, rev;
+    ListView ltsMascotas;
+    DatabaseReference mibd;
+    DatabaseReference mDatabaseReference;
+    MyFirebaseInstanceIdServices myFirebaseInstanceIdServices = new MyFirebaseInstanceIdServices();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_agregar_enmascotas );
+        mibd = FirebaseDatabase.getInstance().getReference( "MascotasBD" );
+
         try {
+
             FloatingActionButton btnMostrarAmigos = findViewById(R.id.btnMostrarMasc);
             btnMostrarAmigos.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mostrarMascota();
+                    mostrarDatosMascota();
                 }
             });
             Button btnGuardarMasc = findViewById( R.id.btnGuardarMasc );
             btnGuardarMasc.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    guardarMascota();
+                    GuardarDatosMascota();
                 }
             } );
             mostrarDatosMascota();
@@ -52,123 +70,100 @@ public class agregar_enmascotas extends AppCompatActivity {
 
     }
 
-    void mostrarDatosMascota(){
+    void mostrarDatosMascota() {
         try {
-            Bundle recibirParametros = getIntent().getExtras();
-            accion = recibirParametros.getString("accion");
-            if (accion.equals("modificar")){
-                JSONObject dataMascota = new JSONObject(recibirParametros.getString("dataMascota")).getJSONObject("value");
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference( "MascotasBD" );
 
-                TextView tempVal = (TextView)findViewById(R.id.txtCodigoMasc);
-                tempVal.setText(dataMascota.getString("Codigo Producto"));
+            mDatabaseReference.orderByChild( "token" ).equalTo( myFirebaseInstanceIdServices.miToken ).addListenerForSingleValueEvent( new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                tempVal = (TextView)findViewById(R.id.txtNombreMasc);
-                tempVal.setText(dataMascota.getString("Nombre"));
+                    try {
+                        if (snapshot.getChildrenCount() <= 0) {
+                            registrarMascota();
+                            finish();
+                        }
+                    } catch (Exception ex) {
+                        Toast.makeText( getApplicationContext(), "Error al saber si estoy registrado: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
+                        registrarMascota();
+                        finish();
+                    }
 
-                tempVal = (TextView)findViewById(R.id.txtMarcaMasc);
-                tempVal.setText(dataMascota.getString("Marca"));
+                }
 
-                tempVal = (TextView)findViewById(R.id.txtPrecioMasc);
-                tempVal.setText(dataMascota.getString("Precio"));
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-                id = dataMascota.getString("_id");
-                rev = dataMascota.getString("_rev");
-            }
-        }catch (Exception ex){
-            ///
+                }
+            } );
+            mDatabaseReference.addValueEventListener( new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    try {
+                        ArrayList<Usuarios> stringArrayList = new ArrayList<Usuarios>();
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Usuarios user = dataSnapshot.getValue( Usuarios.class );
+                            stringArrayList.add( user );
+                        }
+                        adaptadorimagenes adaptadorImg = new adaptadorimagenes( getApplicationContext(), stringArrayList );
+                        ltsMascotas.setAdapter( adaptadorImg );
+                    } catch (Exception ex) {
+                        Toast.makeText( getApplicationContext(), "Error al recuperar: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            } );
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
-    private void mostrarMascota(){
-        Intent mostrarMascota = new Intent(agregar_enmascotas.this, MainActivity.class);
-        startActivity(mostrarMascota);
-    }
 
-    private void guardarMascota(){
-        TextView tempVal = findViewById(R.id.txtCodigoMasc);
-        String codigoprod = tempVal.getText().toString();
+        private void registrarMascota () {
+            Intent intent = new Intent( getApplicationContext(), MainActivity.class );
+            startActivity( intent );
+        }
 
-        tempVal = findViewById(R.id.txtNombreMasc);
-        String nombre = tempVal.getText().toString();
-
-        tempVal = findViewById(R.id.txtMarcaMasc);
-        String marca = tempVal.getText().toString();
-
-        tempVal = findViewById(R.id.txtPrecioMasc);
-        String precio = tempVal.getText().toString();
+    public  void GuardarDatosMascota(){
+        final String Mitoken = myFirebaseInstanceIdServices.miToken;
 
         try {
-            JSONObject datosMasc = new JSONObject();
-            datosMasc.put("Codigo Producto", codigoprod);
-            datosMasc.put("Nombre", nombre);
-            datosMasc.put("Marca", marca);
-            datosMasc.put("Precio", precio);
-            enviarDatosMasc objGuardarMasc = new enviarDatosMasc();
-            objGuardarMasc.execute(datosMasc.toString());
+            TextView tempval0 = findViewById( R.id.txtCodigoMasc );
+            String Codigo = tempval0.getText().toString();
+            TextView tempval1 = findViewById( R.id.txtNombreMasc );
+            String nombre = tempval1.getText().toString();
+            TextView tempval2 = findViewById( R.id.txtPrecioMasc );
+            String precio = tempval2.getText().toString();
+            TextView tempval3 = findViewById( R.id.txtMarcaMasc );
+            String marca = tempval3.getText().toString(),
+                    id = mibd.push().getKey();
+            Usuarios user = new Usuarios( Codigo, nombre,precio, marca, Mitoken );
 
-        }catch (Exception ex){
-            Toast.makeText(getApplicationContext(), "Error: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
-    }
+            if (id != null) {
+                mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText( getApplicationContext(), "Registro guardado con exito", Toast.LENGTH_LONG ).show();
+                        Intent intent = new Intent( getApplicationContext(), listamascotas.class );
+                        startActivity( intent );
+                    }
+                } ).addOnFailureListener( new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText( getApplicationContext(), "Error al crear el registro en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
 
-    private class enviarDatosMasc extends AsyncTask<String,String, String> {
-        HttpURLConnection urlConnection;
-        @Override
-        protected String doInBackground(String... parametros) {
-            StringBuilder stringBuilder = new StringBuilder();
-            String jsonResponse = null;
-            String jsonDatos = parametros[0];
-            BufferedReader reader;
-            try {
-                URL url = new URL("http://192.168.0.15:5984/tiendamascotas/");
-                urlConnection = (HttpURLConnection)url.openConnection();
-                urlConnection.setDoInput(true);
-                urlConnection.setDoOutput(true);
+                    }
+                } );
 
-                urlConnection.setRequestMethod("POST");
-                urlConnection.setRequestProperty("Content-Type","application/json");
-                urlConnection.setRequestProperty("Accept","application/json");
-
-                Writer writer = new BufferedWriter(new OutputStreamWriter(urlConnection.getOutputStream(), "UTF-8"));
-                writer.write(jsonDatos);
-                writer.close();
-
-                InputStream inputStream = urlConnection.getInputStream();
-                if(inputStream==null){
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                resp = reader.toString();
-
-                String inputLine;
-                StringBuffer stringBuffer = new StringBuffer();
-                while ((inputLine=reader.readLine())!= null){
-                    stringBuffer.append(inputLine+"\n");
-                }
-                if(stringBuffer.length()==0){
-                    return null;
-                }
-                jsonResponse = stringBuffer.toString();
-                return jsonResponse;
-            }catch (Exception ex){
-                //
+            } else {
+                Toast.makeText( getApplicationContext(), "Error al crear el registro", Toast.LENGTH_LONG ).show();
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            try{
-                JSONObject jsonObject = new JSONObject(s);
-                if(jsonObject.getBoolean("ok")){
-                    Toast.makeText(getApplicationContext(), "Datos de Mascota guardado con exito", Toast.LENGTH_SHORT).show();
-                    mostrarMascota();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error al intentar guardar datos de Mascota", Toast.LENGTH_SHORT).show();
-                }
-            }catch (Exception e){
-                Toast.makeText(getApplicationContext(), "Error al guardar Mascota: "+e.getMessage(), Toast.LENGTH_LONG).show();
-            }
+        } catch (Exception ex) {
+            //En caso de error
+            Toast.makeText( getApplicationContext(), "Error al intentar guardar Registro" + ex.getMessage(), Toast.LENGTH_LONG ).show();
         }
     }
 }
