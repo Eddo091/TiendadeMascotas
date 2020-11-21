@@ -14,6 +14,9 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**@AUTHORS: EDUARDO ISAÍAS VILLEGAS ORTIZ
+ * @AUTHORS:Jennifer Lorena Aviles Aviles
+ * **/
 public class chatsArrayAdapter extends ArrayAdapter {
     private Context context;
     private List<chatMessage> chatMessageList = new ArrayList<>();

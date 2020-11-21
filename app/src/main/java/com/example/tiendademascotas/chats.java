@@ -14,6 +14,9 @@ import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
+/**@AUTHORS: EDUARDO ISAÍAS VILLEGAS ORTIZ
+ * @AUTHORS:Jennifer Lorena Aviles Aviles
+ * **/
 public class chats extends AppCompatActivity {
     String to = "", miToken="";
     DatabaseReference databaseReference;

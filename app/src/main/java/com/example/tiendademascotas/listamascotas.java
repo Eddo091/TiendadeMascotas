@@ -22,7 +22,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
+/**@AUTHORS: EDUARDO ISAÍAS VILLEGAS ORTIZ
+ * @AUTHORS:Jennifer Lorena Aviles Aviles
+ * **/
 public class listamascotas extends AppCompatActivity {
     DatabaseReference mDatabaseReference;
     ListView ltsMascotas;

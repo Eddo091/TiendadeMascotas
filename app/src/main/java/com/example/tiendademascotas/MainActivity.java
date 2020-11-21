@@ -32,7 +32,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
+/**@AUTHORS: EDUARDO ISAÍAS VILLEGAS ORTIZ
+ * @AUTHORS:Jennifer Lorena Aviles Aviles
+ * **/
 public class MainActivity extends AppCompatActivity {
     DatabaseReference mibd;
     MyFirebaseInstanceIdServices myFirebaseInstanceIdServices = new MyFirebaseInstanceIdServices();

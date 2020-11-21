@@ -1,5 +1,8 @@
 package com.example.tiendademascotas;
 
+/**@AUTHORS: EDUARDO ISAÍAS VILLEGAS ORTIZ
+ * @AUTHORS:Jennifer Lorena Aviles Aviles
+ * **/
 class chats_mensajes {
     public String para, de, para_de, msg;
 
