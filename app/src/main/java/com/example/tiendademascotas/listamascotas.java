@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,11 +34,28 @@ public class listamascotas extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
+        ltsMascotas = findViewById( R.id.ltsTiendaMascotaFireBase );
         mostrarlistadoMascotas();
+        ltsMascotas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("Usuario", "Juan Pruebas");
+                    bundle.putString("to", "12345678");
+
+                    Intent intent = new Intent(getApplicationContext(), chats.class);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }catch (Exception ex){
+                    Toast.makeText(getApplicationContext(), "Error al seleccionar el usuario a chatear: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
     }
 
     private void mostrarlistadoMascotas() {
-        ltsMascotas = findViewById( R.id.ltsTiendaMascotaFireBase );
+
         mDatabaseReference = FirebaseDatabase.getInstance().getReference( "usuarios" );
         mDatabaseReference.orderByChild( "token" ).equalTo( myFirebaseInstanceIdService.miToken ).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
