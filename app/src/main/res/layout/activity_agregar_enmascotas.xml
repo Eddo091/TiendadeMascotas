@@ -5,13 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".agregar_enmascotas">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/crvFoto"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="30dp">
 
+
+        <ImageView
+            android:id="@+id/imgFoto"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/foto"
+            android:src="@drawable/camara" />
+    </androidx.cardview.widget.CardView>
     <EditText
         android:id="@+id/txtCodigoMasc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:hint="@string/cod_producto"
+        android:layout_below="@id/crvFoto"
         android:importantForAutofill="no"
         android:inputType="text" />
 
@@ -21,8 +39,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="120dp"
         android:hint="@string/nombre"
+        android:layout_below="@id/crvFoto"
         android:importantForAutofill="no"
-        android:inputType="text" />
+        android:inputType="text"
+        />
 
     <EditText
         android:id="@+id/txtMarcaMasc"
@@ -30,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="180dp"
         android:hint="@string/marca"
+        android:layout_below="@id/crvFoto"
         android:inputType="text"
         android:importantForAutofill="no" />
 
@@ -40,7 +61,8 @@
         android:layout_marginTop="240dp"
         android:hint="@string/precio"
         android:inputType="text"
-        android:autofillHints="" />
+        android:layout_below="@id/crvFoto"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/btnGuardarMasc"
@@ -48,7 +70,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="360dp"
         android:text="@string/guardar"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:layout_below="@id/crvFoto"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btnMostrarMasc"

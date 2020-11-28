@@ -38,6 +38,7 @@ public class listamascotas extends AppCompatActivity {
         setContentView( R.layout.activity_main );
         ltsMascotas = findViewById( R.id.ltsTiendaMascotaFireBase );
         mostrarlistadoMascotas();
+
         ltsMascotas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -58,6 +59,7 @@ public class listamascotas extends AppCompatActivity {
     }
 
     private void mostrarlistadoMascotas() {
+        ltsMascotas = findViewById(R.id.ltsTiendaMascotaFireBase);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Mascotas" );
         mDatabaseReference.orderByChild( "token" ).equalTo( myFirebaseInstanceIdService.miToken ).addListenerForSingleValueEvent( new ValueEventListener() {
@@ -89,6 +91,7 @@ public class listamascotas extends AppCompatActivity {
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                         Usuarios user = dataSnapshot.getValue(Usuarios.class);
                         stringArrayList.add(user);
+
                         datosJSONObject = new JSONObject();
                         datosJSONObject.put("user", user.getUserName());
                         datosJSONObject.put("to", user.getToken());

@@ -9,17 +9,14 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
-
-public class adaptadorimagenes extends BaseAdapter {
+public class adaptadorimagenesmasc  extends  BaseAdapter{
     Context context;
-    ArrayList<Usuarios> datos;
+    ArrayList<Mascotas> datos;
     LayoutInflater layoutInflater;
-    Usuarios user;
+    Mascotas user;
 
-
-    public adaptadorimagenes(Context context, ArrayList<Usuarios> datos){
+    public adaptadorimagenesmasc(Context context, ArrayList<Mascotas> datos){
         this.context = context;
         try {
             this.datos = datos;
@@ -49,7 +46,7 @@ public class adaptadorimagenes extends BaseAdapter {
         ImageView imageView = (ImageView)itemView.findViewById(R.id.img);
         try {
             user = datos.get(i);
-            textView.setText(user.getUserName());
+            textView.setText(user.getNombre());
             Bitmap imageBitmap = BitmapFactory.decodeFile(user.getUrlFoto());
             imageView.setImageBitmap(imageBitmap);
         }catch (Exception ex){ }

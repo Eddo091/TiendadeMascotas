@@ -2,9 +2,13 @@ package com.example.tiendademascotas;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -12,12 +16,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -29,6 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,19 +44,66 @@ import java.util.Date;
  * @AUTHORS:Jennifer Lorena Aviles Aviles
  * **/
 public class MainActivity extends AppCompatActivity {
+
+
     DatabaseReference mibd;
     MyFirebaseInstanceIdServices myFirebaseInstanceIdServices = new MyFirebaseInstanceIdServices();
-    Integer posicion;
     ImageView imgfoto;
     Intent takePictureIntent;
     String urlCompletaImg;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.iniciosesion );
+        try {
+            setContentView( R.layout.activity_agregar_enmascotas);
+        } catch (Exception ex) {Toast.makeText(getApplicationContext(), "Error: "+ ex.getMessage(), Toast.LENGTH_LONG).show();}
+
         imgfoto=findViewById(R.id.imgFoto);
-        tomarFoto();
+
+        /**Pedir permiso si es android 6.0 en adelante**/
+        imgfoto.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view== imgfoto){
+
+                        if (ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(MainActivity.this,
+                                Manifest.permission.CAMERA)
+                                != PackageManager.PERMISSION_GRANTED) {
+
+
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                            } else {
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        225);
+                            }
+
+
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this,
+                                    Manifest.permission.CAMERA)) {
+
+                            } else {
+                                ActivityCompat.requestPermissions(MainActivity.this,
+                                        new String[]{Manifest.permission.CAMERA},
+                                        226);
+                            }
+                        } else {
+                            tomarFoto();
+                        }
+                    }
+                }
+
+        } );
+
+
+
         try {
             //Llamar al token
             final String Mitoken = myFirebaseInstanceIdServices.miToken;
@@ -106,38 +160,39 @@ public class MainActivity extends AppCompatActivity {
         }
 
         /**Tomar la foto**/
-    void tomarFoto () {
-        imgfoto.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                takePictureIntent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
-                if (takePictureIntent.resolveActivity( getPackageManager() ) != null) {
-                    //guardando la imagen
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (Exception ex) {
-                    }
-                    if (photoFile != null) {
+        void tomarFoto () {
+            imgfoto.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    takePictureIntent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
+                    if (takePictureIntent.resolveActivity( getPackageManager() ) != null) {
+                        //guardando la imagen
+                        File photoFile = null;
                         try {
-                            Uri photoURI = FileProvider.getUriForFile( MainActivity.this, "com.example.prueba.fileprovider", photoFile );
-                            takePictureIntent.putExtra( MediaStore.EXTRA_OUTPUT, photoURI );
-                            startActivityForResult( takePictureIntent, 1 );
-                        } catch (Exception ex) {
-                            Toast.makeText( getApplicationContext(), "Error Toma Foto: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
+                            photoFile = createImageFile();
+                        } catch (Exception ex) { }
+                        if (photoFile != null) {
+                            try {
+                                Uri photoURI = FileProvider.getUriForFile( MainActivity.this, "com.example.prueba.fileprovider", photoFile );
+                                takePictureIntent.putExtra( MediaStore.EXTRA_OUTPUT, photoURI );
+                                startActivityForResult( takePictureIntent, 1 );
+                            } catch (Exception ex) {
+                                Toast.makeText( getApplicationContext(), "Error Toma Foto: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
+                            }
                         }
                     }
                 }
-            }
-        } );
+            } );
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         try {
+
             if (requestCode == 1 && resultCode == RESULT_OK) {
-                Bitmap imageBitmap = BitmapFactory.decodeFile(urlCompletaImg);
-                imgfoto.setImageBitmap(imageBitmap);
+                Bitmap imageBitmap= BitmapFactory.decodeFile(urlCompletaImg);
+               imgfoto.setImageBitmap(imageBitmap);
+
             }
         }catch (Exception ex){
             Toast.makeText(getApplicationContext(), "Error: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -147,10 +202,9 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile () throws IOException {
         // Create an image file name
         @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "imagen_" + timeStamp + "_";
+        String imageFileName = "imagen" + timeStamp + "_";
         File storageDir = getExternalFilesDir( Environment.DIRECTORY_PICTURES);
-        assert storageDir != null;
-        if(!storageDir.exists()){
+        if( storageDir.exists()==false ){
             storageDir.mkdirs();
         }
         File image = File.createTempFile(
@@ -162,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         urlCompletaImg = image.getAbsolutePath();
         return image;
     }
+
 }
 
 
