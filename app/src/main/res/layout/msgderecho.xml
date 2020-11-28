@@ -6,10 +6,10 @@
         android:id="@+id/lblmsgd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mensaje de prueba lado derecho"
+        android:text="@string/mensaje_de_prueba_lado_derecho"
         android:background="@drawable/derecho"
         android:layout_margin="10dp"
         android:padding="10dp"
-        android:gravity="right"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

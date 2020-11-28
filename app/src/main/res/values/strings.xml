@@ -9,11 +9,12 @@
     <string name="foto">foto</string>
     <string name="usuario">Usuario</string>
     <string name="descripcion">Descripcion...</string>
-    <string name="todo">TODO</string>
     <string name="email">Email</string>
     <string name="contrase_a">Contraseña</string>
     <string name="escribe_un_mensaje">Escribe un Mensaje...</string>
     <string name="tiendamascotas">TiendaMascotas</string>
     <string name="todo">TODO</string>
+    <string name="mensaje_de_prueba_lado_derecho">Mensaje de prueba lado derecho</string>
+    <string name="mensaje_de_prueba_lado_izquierdo">Mensaje de prueba lado izquierdo</string>
 
 </resources>

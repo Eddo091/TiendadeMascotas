@@ -64,17 +64,16 @@ public class listamascotas extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                try {
-                    if (snapshot.getChildrenCount() <= 0) {
+                try{
+                    if( snapshot.getChildrenCount()<=0 ){
                         registrarUsuario();
                         finish();
                     }
-                } catch (Exception ex) {
-                    Toast.makeText( getApplicationContext(), "Error al saber si estoy registrado: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
+                }catch (Exception ex){
+                    Toast.makeText(getApplicationContext(), "Error al saber si estoy registrado: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
                     registrarUsuario();
                     finish();
                 }
-
             }
 
             @Override
