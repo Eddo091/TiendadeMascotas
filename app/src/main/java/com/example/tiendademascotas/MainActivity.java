@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                         String email = tempval2.getText().toString();
                         String contra = tempval3.getText().toString();
                         String nombre = tempval.getText().toString(),
+
                                 id = mibd.push().getKey();
                         Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, Mitoken );
 

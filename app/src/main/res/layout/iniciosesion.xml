@@ -7,21 +7,21 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/crvFoto"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
         android:layout_gravity="center"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         app:cardCornerRadius="150dp">
 
 
-    <ImageView
-        android:id="@+id/imgFoto"
-        android:layout_width="129dp"
-        android:layout_height="125dp"
-        android:layout_marginTop="85dp"
-        android:contentDescription="@string/foto"
-        android:src="@drawable/camara" />
+        <ImageView
+            android:id="@+id/imgFoto"
+            android:layout_width="139dp"
+            android:layout_height="125dp"
+            android:layout_marginTop="2dp"
+            android:contentDescription="@string/foto"
+            android:src="@drawable/camara" />
     </androidx.cardview.widget.CardView>
     <EditText
         android:id="@+id/txtSesionnombre"
@@ -59,8 +59,8 @@
     <Button
         android:id="@+id/BtnGuardaRegistro"
         android:background="@drawable/save"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_below="@id/txtcontra"
         android:layout_marginTop="60dp"
         android:layout_centerHorizontal="true"/>
