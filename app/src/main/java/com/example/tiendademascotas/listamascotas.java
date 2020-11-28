@@ -61,7 +61,7 @@ public class listamascotas extends AppCompatActivity {
     private void mostrarlistadoMascotas() {
         ltsMascotas = findViewById(R.id.ltsTiendaMascotaFireBase);
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Mascotas" );
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Mascota" );
         mDatabaseReference.orderByChild( "token" ).equalTo( myFirebaseInstanceIdService.miToken ).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -87,13 +87,13 @@ public class listamascotas extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try{
-                    ArrayList<Usuarios> stringArrayList = new ArrayList<Usuarios>();
+                    ArrayList<Mascotas> stringArrayList = new ArrayList<Mascotas>();
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                        Usuarios user = dataSnapshot.getValue(Usuarios.class);
+                        Mascotas user = dataSnapshot.getValue(Mascotas.class);
                         stringArrayList.add(user);
 
                         datosJSONObject = new JSONObject();
-                        datosJSONObject.put("user", user.getUserName());
+                        datosJSONObject.put("user", user.nombre);
                         datosJSONObject.put("to", user.getToken());
                         datosJSONObject.put("from", myFirebaseInstanceIdService.miToken);
                         datosJSONArray.put(datosJSONObject);

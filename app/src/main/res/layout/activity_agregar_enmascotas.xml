@@ -64,25 +64,22 @@
         android:layout_below="@id/crvFoto"
         android:importantForAutofill="no" />
 
+
     <Button
         android:id="@+id/btnGuardarMasc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="360dp"
+        android:layout_marginTop="460dp"
         android:text="@string/guardar"
         android:textSize="18sp"
-        android:layout_below="@id/crvFoto"/>
+        />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <Button
         android:id="@+id/btnMostrarMasc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        android:src="@android:drawable/ic_menu_revert"
-        app:backgroundTint="#000000"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="20dp"
+        android:background="@android:drawable/ic_menu_revert"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="570dp"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp" />
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

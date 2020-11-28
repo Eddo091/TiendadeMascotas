@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         try {
-            setContentView( R.layout.activity_agregar_enmascotas);
+            setContentView( R.layout.iniciosesion);
         } catch (Exception ex) {Toast.makeText(getApplicationContext(), "Error: "+ ex.getMessage(), Toast.LENGTH_LONG).show();}
 
         imgfoto=findViewById(R.id.imgFoto);
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
         } );
 
 
+/**Guardar**/
 
         try {
             //Llamar al token

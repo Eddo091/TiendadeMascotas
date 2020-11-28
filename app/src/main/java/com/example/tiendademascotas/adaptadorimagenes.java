@@ -19,7 +19,7 @@ public class adaptadorimagenes extends BaseAdapter {
     Usuarios user;
 
 
-    public adaptadorimagenes(Context context, ArrayList<Usuarios> datos){
+    public adaptadorimagenes(Context context, ArrayList<Mascotas> datos){
         this.context = context;
         try {
             this.datos = datos;
