@@ -59,7 +59,7 @@ public class listamascotas extends AppCompatActivity {
 
     private void mostrarlistadoMascotas() {
 
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Usuarios" );
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Mascotas" );
         mDatabaseReference.orderByChild( "token" ).equalTo( myFirebaseInstanceIdService.miToken ).addListenerForSingleValueEvent( new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
