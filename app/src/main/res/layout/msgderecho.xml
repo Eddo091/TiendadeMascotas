@@ -10,5 +10,6 @@
         android:background="@drawable/derecho"
         android:layout_margin="10dp"
         android:padding="10dp"
-        android:gravity="right"/>
+        android:gravity="right"
+        android:layout_alignParentRight="true"/>
 </RelativeLayout>

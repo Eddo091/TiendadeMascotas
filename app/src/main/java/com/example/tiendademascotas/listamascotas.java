@@ -43,8 +43,9 @@ public class listamascotas extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     Bundle bundle = new Bundle();
-                    bundle.putString("Usuario", "Juan Pruebas");
-                    bundle.putString("to", "12345678");
+                    bundle.putString("User", datosJSONArray.getJSONObject(position).getString("User"));
+                    bundle.putString("to", datosJSONArray.getJSONObject(position).getString("to"));
+                    bundle.putString("from", datosJSONArray.getJSONObject(position).getString("from"));
 
                     Intent intent = new Intent(getApplicationContext(), chats.class);
                     intent.putExtras(bundle);
@@ -89,6 +90,11 @@ public class listamascotas extends AppCompatActivity {
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                         Usuarios user = dataSnapshot.getValue(Usuarios.class);
                         stringArrayList.add(user);
+                        datosJSONObject = new JSONObject();
+                        datosJSONObject.put("user", user.getUserName());
+                        datosJSONObject.put("to", user.getToken());
+                        datosJSONObject.put("from", myFirebaseInstanceIdService.miToken);
+                        datosJSONArray.put(datosJSONObject);
                     }
                     adaptadorimagenes adaptadorImg = new adaptadorimagenes(getApplicationContext(), stringArrayList);
                     ltsMascotas.setAdapter(adaptadorImg);
