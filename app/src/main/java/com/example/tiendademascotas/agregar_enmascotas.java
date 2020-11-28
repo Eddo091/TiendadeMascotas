@@ -106,6 +106,19 @@ public class agregar_enmascotas extends AppCompatActivity {
         } );
         final String Mitoken = myFirebaseInstanceIdServices.miToken;
         mibd = FirebaseDatabase.getInstance().getReference( "Mascota" );
+        try {
+
+            Button btnMostrarMascotas = findViewById(R.id.btnMostrarMasc);
+            btnMostrarMascotas.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mostrarDatosMascota();
+                }
+            });
+        } catch (Exception ex){
+            Toast.makeText(getApplicationContext(), "Error al agregar en Tienda Mascota: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
+        }
+
         //Llamar al token
         mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Mascota" );
         Button BtnGuardarUsRegistro = findViewById( R.id.btnGuardarMasc );
@@ -153,19 +166,7 @@ public class agregar_enmascotas extends AppCompatActivity {
             } );
             mostrarDatosMascota();
 
-            //Atras
-        try {
 
-            Button btnMostrarMascotas = findViewById(R.id.btnMostrarMasc);
-            btnMostrarMascotas.setOnClickListener( new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mostrarDatosMascota();
-                }
-            });
-        } catch (Exception ex){
-            Toast.makeText(getApplicationContext(), "Error al agregar en Tienda Mascota: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
 
 
     }
