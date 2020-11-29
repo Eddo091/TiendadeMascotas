@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -57,6 +56,7 @@ public class agregar_enmascotas extends AppCompatActivity {
     ImageView imgfoto;
     Intent takePictureIntent;
     String urlCompletaImg;
+
     MyFirebaseInstanceIdServices myFirebaseInstanceIdServices = new MyFirebaseInstanceIdServices();
 
 
@@ -104,10 +104,68 @@ public class agregar_enmascotas extends AppCompatActivity {
             }
 
         } );
-        final String Mitoken = myFirebaseInstanceIdServices.miToken;
-        mibd = FirebaseDatabase.getInstance().getReference( "Mascota" );
-        try {
 
+        try{
+
+            //Llamar token
+            final String Mitoken = myFirebaseInstanceIdServices.miToken;
+            //Guardar los datos en Firebase
+            mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Mascota" );
+
+
+
+
+       //Botón para guardar los datos
+            Button BtnGuardarMascota = findViewById( R.id.btnGuardarMasc );
+            BtnGuardarMascota.setOnClickListener( new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    try {
+                        TextView tempval0 = findViewById( R.id.txtCodigoMasc );
+                        String Codigo = tempval0.getText().toString();
+                        TextView tempval1 = findViewById( R.id.txtNombreMasc );
+                        String nombre = tempval1.getText().toString();
+                        TextView tempval2 = findViewById( R.id.txtPrecioMasc );
+                        String precio = tempval2.getText().toString();
+                        TextView tempval3 = findViewById( R.id.txtMarcaMasc );
+                        String marca = tempval3.getText().toString(),
+                                id = mibd.push().getKey();
+                        Mascotas user = new Mascotas( Codigo,nombre,precio,marca,urlCompletaImg,Mitoken);
+                        if (id != null) {
+                            mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Toast.makeText( getApplicationContext(), "Producto guardado con exito", Toast.LENGTH_LONG ).show();
+                                    Intent intent = new Intent( getApplicationContext(), listamascotas.class );
+                                    startActivity( intent );
+                                }
+                            } ).addOnFailureListener( new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText( getApplicationContext(), "Error al crear el Producto en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
+                                }
+                            } );
+                        } else {
+                            Toast.makeText( getApplicationContext(), "Error al crear el Producto", Toast.LENGTH_LONG ).show();
+                        }
+                    } catch (Exception ex) {
+                        //En caso de error
+                        Toast.makeText( getApplicationContext(), "Error al intentar guardar Producto" + ex.getMessage(), Toast.LENGTH_LONG ).show();
+                    }
+                }
+
+            } );
+            mostrarDatosMascota();
+
+        } catch(Exception ex){
+            Toast.makeText( getApplicationContext(), "Error: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
+
+
+        }
+
+        //Mostar
+        try {
+            //mibd = FirebaseDatabase.getInstance().getReference( "Mascota" );
             Button btnMostrarMascotas = findViewById(R.id.btnMostrarMasc);
             btnMostrarMascotas.setOnClickListener( new View.OnClickListener() {
                 @Override
@@ -118,54 +176,6 @@ public class agregar_enmascotas extends AppCompatActivity {
         } catch (Exception ex){
             Toast.makeText(getApplicationContext(), "Error al agregar en Tienda Mascota: "+ ex.getMessage(), Toast.LENGTH_LONG).show();
         }
-
-        //Llamar al token
-        mDatabaseReference = FirebaseDatabase.getInstance().getReference( "Mascota" );
-        Button BtnGuardarUsRegistro = findViewById( R.id.btnGuardarMasc );
-        BtnGuardarUsRegistro.setOnClickListener( new View.OnClickListener()  {
-                @Override
-                public void onClick(View v) {
-                    //Guardar los datos en Firebase
-                    mibd = FirebaseDatabase.getInstance().getReference( "Mascota" );
-                    {
-                            try {
-                                TextView tempval0 = findViewById( R.id.txtCodigoMasc );
-                                String Codigo = tempval0.getText().toString();
-                                TextView tempval1 = findViewById( R.id.txtNombreMasc );
-                                String nombre = tempval1.getText().toString();
-                                TextView tempval2 = findViewById( R.id.txtPrecioMasc );
-                                String precio = tempval2.getText().toString();
-                                TextView tempval3 = findViewById( R.id.txtMarcaMasc );
-                                String marca = tempval3.getText().toString(),
-                                        id = mibd.push().getKey();
-                                Mascotas user = new Mascotas( Codigo,nombre,precio,marca,urlCompletaImg,Mitoken);
-                                if (id != null) {
-                                    mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Toast.makeText( getApplicationContext(), "Registro guardado con exito", Toast.LENGTH_LONG ).show();
-                                            Intent intent = new Intent( getApplicationContext(), listamascotas.class );
-                                            startActivity( intent );
-                                        }
-                                    } ).addOnFailureListener( new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText( getApplicationContext(), "Error al crear el registro en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
-                                        }
-                                    } );
-                                } else {
-                                    Toast.makeText( getApplicationContext(), "Error al crear el registro", Toast.LENGTH_LONG ).show();
-                                }
-                            } catch (Exception ex) {
-                                //En caso de error
-                                Toast.makeText( getApplicationContext(), "Error al intentar guardar Registro" + ex.getMessage(), Toast.LENGTH_LONG ).show();
-                            }
-
-                    }
-                }
-            } );
-            mostrarDatosMascota();
-
 
 
 
@@ -223,7 +233,8 @@ public class agregar_enmascotas extends AppCompatActivity {
     }
 
         private void registrarMascota () {
-            Intent intent = new Intent( getApplicationContext(), MainActivity.class );
+        //creo que es para registrar en la listamascota
+            Intent intent = new Intent( getApplicationContext(), listamascotas.class );
             startActivity( intent );
         }
 

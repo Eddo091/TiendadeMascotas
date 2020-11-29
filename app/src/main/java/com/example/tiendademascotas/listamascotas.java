@@ -98,7 +98,7 @@ public class listamascotas extends AppCompatActivity {
                         datosJSONObject.put("from", myFirebaseInstanceIdService.miToken);
                         datosJSONArray.put(datosJSONObject);
                     }
-                    adaptadorimagenes adaptadorImg = new adaptadorimagenes(getApplicationContext(), stringArrayList);
+                    adaptadorimagenesmasc adaptadorImg = new adaptadorimagenesmasc(getApplicationContext(), stringArrayList);
                     ltsMascotas.setAdapter(adaptadorImg);
                 }catch (Exception ex){
                     Toast.makeText(getApplicationContext(), "Error al recuperar: "+ ex.getMessage(), Toast.LENGTH_LONG).show();

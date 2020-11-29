@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".agregar_enmascotas">
+    tools:context=".agregar_enmascotas"
+    android:contentDescription="@string/todo">
     <androidx.cardview.widget.CardView
         android:id="@+id/crvFoto"
         android:layout_width="130dp"
@@ -67,19 +68,21 @@
 
     <Button
         android:id="@+id/btnGuardarMasc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="460dp"
-        android:text="@string/guardar"
-        android:textSize="18sp"
+        android:background="@drawable/save"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/crvFoto"
+        android:layout_marginTop="360dp"
+        android:layout_centerHorizontal="true"
         />
 
     <Button
         android:id="@+id/btnMostrarMasc"
         android:background="@android:drawable/ic_menu_revert"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="570dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="495dp"
         android:layout_alignParentRight="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
