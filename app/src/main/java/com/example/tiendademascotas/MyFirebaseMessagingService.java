@@ -9,6 +9,8 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -33,8 +35,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Intent intent = new Intent( this , chats.class );
         intent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("msg", remoteMessage.getData().get("msg"));
-        intent.putExtra("to", remoteMessage.getData().get("to"));
-        intent.putExtra("de", remoteMessage.getData().get("de"));
+        intent.putExtra("to", remoteMessage.getData().get("para"));
+        intent.putExtra("from", remoteMessage.getData().get("de"));
+        intent.putExtra("user", remoteMessage.getData().get("user"));
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -43,7 +46,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri notificationSoundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder( this, ADMIN_CHANNEL_ID)                .
                 setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Notificacion Credada por Luis")
+                .setContentTitle("Has recibido un mensaje de" +remoteMessage.getData().get( "de" ))
                 .setContentText(remoteMessage.getData().get("msg"))
                 .setAutoCancel( true )
                 .setSound(notificationSoundURI)
@@ -69,8 +72,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNewMsgBroadcast(RemoteMessage remoteMessage) {
         Intent intent = new Intent(DISPLAY_MESSAGE_ACTION);
         intent.putExtra("msg", remoteMessage.getData().get("msg"));
-        intent.putExtra("to", remoteMessage.getData().get("to"));
-        intent.putExtra("de", remoteMessage.getData().get("de"));
+        intent.putExtra("to", remoteMessage.getData().get("para"));
+        intent.putExtra("from", remoteMessage.getData().get("de"));
+        intent.putExtra("user", remoteMessage.getData().get("user"));
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
     }
 }

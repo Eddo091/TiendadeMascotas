@@ -1,12 +1,12 @@
 package com.example.tiendademascotas;
 
 public class Usuarios {
-    String UserName, email, contra,urlFoto,Token;
+    String UserName, email, contra,urlFoto, urlFotoFirestore , Token;
     //polimorfismo
     public  Usuarios(){}
 
     //parametros
-    public Usuarios(String userName, String email, String contra, String urlFoto, String token) {
+    public Usuarios(String userName, String email, String contra, String urlFoto, String urlFotoFirestore, String token) {
         this.UserName=userName;
         this.email = email;
         this.contra= contra;
@@ -14,6 +14,13 @@ public class Usuarios {
         this.Token = token;
     }
 
+    public String getUrlFotoFirestore() {
+        return urlFotoFirestore;
+    }
+
+    public void setUrlFotoFirestore(String urlFotoFirestore) {
+        this.urlFotoFirestore = urlFotoFirestore;
+    }
 
     public String getUserName() {
         return UserName;

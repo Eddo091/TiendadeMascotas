@@ -1,15 +1,23 @@
 package com.example.tiendademascotas;
 
 public class Mascotas {
-    String codigo, nombre, precio, marca, urlFoto,Token;
+    String codigo, nombre, precio, marca, urlFoto, urlFotoFirestore ,Token;
     public Mascotas (){}
-    public Mascotas(String Codigo, String Nombre, String Precio,String Marca, String urlFoto, String token){
+    public Mascotas(String Codigo, String Nombre, String Precio,String Marca, String urlFoto, String urlFotoFirestore, String token){
         this.codigo=Codigo;
         this.nombre= Nombre;
         this.precio= Precio;
         this.urlFoto = urlFoto;
         this.Token = token;
 
+    }
+
+    public String getUrlFotoFirestore() {
+        return urlFotoFirestore;
+    }
+
+    public void setUrlFotoFirestore(String urlFotoFirestore) {
+        this.urlFotoFirestore = urlFotoFirestore;
     }
 
     public String getCodigo() {
@@ -23,6 +31,7 @@ public class Mascotas {
     public String getNombre() {
         return nombre;
     }
+
 
     public void setNombre(String nombre) {
         this.nombre = nombre;

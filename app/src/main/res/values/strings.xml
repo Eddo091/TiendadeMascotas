@@ -16,5 +16,6 @@
     <string name="todo">TODO</string>
     <string name="mensaje_de_prueba_lado_derecho">Mensaje de prueba lado derecho</string>
     <string name="mensaje_de_prueba_lado_izquierdo">Mensaje de prueba lado izquierdo</string>
+    <string name="fotoperfil">fotoperfil</string>
 
 </resources>

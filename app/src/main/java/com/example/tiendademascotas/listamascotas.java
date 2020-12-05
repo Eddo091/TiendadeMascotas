@@ -47,6 +47,8 @@ public class listamascotas extends AppCompatActivity {
                     bundle.putString("User", datosJSONArray.getJSONObject(position).getString("User"));
                     bundle.putString("to", datosJSONArray.getJSONObject(position).getString("to"));
                     bundle.putString("from", datosJSONArray.getJSONObject(position).getString("from"));
+                    bundle.putString("urlFoto", datosJSONArray.getJSONObject(position).getString("urlFoto"));
+                    bundle.putString("urlFotoFirestore", datosJSONArray.getJSONObject(position).getString("urlFotoFirestore"));
 
                     Intent intent = new Intent(getApplicationContext(), chats.class);
                     intent.putExtras(bundle);
@@ -96,6 +98,8 @@ public class listamascotas extends AppCompatActivity {
                         datosJSONObject.put("user", user.nombre);
                         datosJSONObject.put("to", user.getToken());
                         datosJSONObject.put("from", myFirebaseInstanceIdService.miToken);
+                        datosJSONObject.put("urlFoto", user.getUrlFoto());
+                        datosJSONObject.put("urlFotoFirestore", user.getUrlFotoFirestore());
                         datosJSONArray.put(datosJSONObject);
                     }
                     adaptadorimagenesmasc adaptadorImg = new adaptadorimagenesmasc(getApplicationContext(), stringArrayList);
