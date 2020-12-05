@@ -21,12 +21,20 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import android.os.Environment;
 import android.provider.MediaStore;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,12 +59,17 @@ public class MainActivity extends AppCompatActivity {
     ImageView imgfoto;
     Intent takePictureIntent;
     String urlCompletaImg;
+    String urlCompletaImgFirestore;
+    String miToken;
+
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+        miToken = myFirebaseInstanceIdServices.miToken;
+
         try {
             setContentView( R.layout.iniciosesion);
         } catch (Exception ex) {Toast.makeText(getApplicationContext(), "Error: "+ ex.getMessage(), Toast.LENGTH_LONG).show();}
@@ -103,48 +116,21 @@ public class MainActivity extends AppCompatActivity {
         } );
 
 
-/**Guardar**/
+/**BtnGuardar**/
 
         try {
-            //Llamar al token
+
+            /**Llamar al token**/
             final String Mitoken = myFirebaseInstanceIdServices.miToken;
-            //Guardar los datos en Firebase
+            /**Guardar datos en Firebase**/
             mibd = FirebaseDatabase.getInstance().getReference( "Usuarios" );
-            //Botón  Para Guardar Registros
+            /**Boton Para Guardar Registros**/
             Button BtnGuardarUsRegistro = findViewById( R.id.BtnGuardaRegistro );
             BtnGuardarUsRegistro.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     try {
-                        TextView tempval = findViewById( R.id.txtSesionnombre );
-                        TextView tempval2 = findViewById( R.id.txtcorreo );
-                        TextView tempval3 = findViewById( R.id.txtcontra );
-                        String email = tempval2.getText().toString();
-                        String contra = tempval3.getText().toString();
-                        String nombre = tempval.getText().toString(),
-
-                                id = mibd.push().getKey();
-                        Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, Mitoken );
-
-                        if (id != null) {
-                            mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText( getApplicationContext(), "Registro guardado con exito", Toast.LENGTH_LONG ).show();
-                                    Intent intent = new Intent( getApplicationContext(), listamascotas.class );
-                                    startActivity( intent );
-                                }
-                            } ).addOnFailureListener( new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText( getApplicationContext(), "Error al crear el registro en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
-
-                                }
-                            } );
-
-                        } else {
-                            Toast.makeText( getApplicationContext(), "Error al crear el registro", Toast.LENGTH_LONG ).show();
-                        }
+                    subirFilestore();
                     } catch (Exception ex) {
                         //En caso de error
                         Toast.makeText( getApplicationContext(), "Error al intentar guardar Registro" + ex.getMessage(), Toast.LENGTH_LONG ).show();
@@ -157,6 +143,74 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText( getApplicationContext(), "Error: " + ex.getMessage(), Toast.LENGTH_LONG ).show();
 
 
+            }
+        }
+    /**Subir datos en Firebase**/
+        private void subirFilestore(){
+            Toast.makeText(getApplicationContext(), "Te informaremos cuando la foto se suba a firestoire",Toast.LENGTH_SHORT).show();
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            Uri file = Uri.fromFile(new File(urlCompletaImg));
+            final StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
+
+            final UploadTask uploadTask = riversRef.putFile(file);
+            StorageTask<UploadTask.TaskSnapshot> taskSnapshotStorageTask = uploadTask.addOnFailureListener( new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText( getApplicationContext(), "Fallo el intento de subir la foto a firestore: " + e.getMessage(), Toast.LENGTH_LONG ).show();
+
+                }
+            } );
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(getApplicationContext(), "Listo se subio la foto a firestore",Toast.LENGTH_SHORT).show();
+                    Task<Uri> downloadUri = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            return riversRef.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if(task.isSuccessful()) {
+                                urlCompletaImgFirestore = task.getResult().toString();
+                                guardarDatosFirebase();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        /**Guardar datos en Firebase**/
+        private void guardarDatosFirebase(){
+            TextView tempval = findViewById( R.id.txtSesionnombre );
+            TextView tempval2 = findViewById( R.id.txtcorreo );
+            TextView tempval3 = findViewById( R.id.txtcontra );
+            String email = tempval2.getText().toString();
+            String contra = tempval3.getText().toString();
+            String nombre = tempval.getText().toString(),
+
+                    id = mibd.push().getKey();
+            Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, miToken );
+
+            if (id != null) {
+                mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText( getApplicationContext(), "Registro guardado con exito", Toast.LENGTH_LONG ).show();
+                        Intent intent = new Intent( getApplicationContext(), listamascotas.class );
+                        startActivity( intent );
+                    }
+                } ).addOnFailureListener( new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText( getApplicationContext(), "Error al crear el registro en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
+
+                    }
+                } );
+
+            } else {
+                Toast.makeText( getApplicationContext(), "Error al crear el registro", Toast.LENGTH_LONG ).show();
             }
         }
 
