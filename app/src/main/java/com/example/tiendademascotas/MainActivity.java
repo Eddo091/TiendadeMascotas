@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
             String nombre = tempval.getText().toString(),
 
                     id = mibd.push().getKey();
-            Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, miToken );
+            Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, urlCompletaImgFirestore, miToken );
 
             if (id != null) {
                 mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
