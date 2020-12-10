@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -24,6 +26,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,6 +53,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 public class agregar_enmascotas extends AppCompatActivity {
     ListView ltsMascotas;
     DatabaseReference mibd;
@@ -56,7 +64,8 @@ public class agregar_enmascotas extends AppCompatActivity {
     ImageView imgfoto;
     Intent takePictureIntent;
     String urlCompletaImg;
-
+    String urlCompletaImgFirestore;
+    String miToken;
     MyFirebaseInstanceIdServices myFirebaseInstanceIdServices = new MyFirebaseInstanceIdServices();
 
 
@@ -65,6 +74,8 @@ public class agregar_enmascotas extends AppCompatActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_agregar_enmascotas );
         imgfoto=findViewById(R.id.imgFoto);
+        miToken = myFirebaseInstanceIdServices.miToken;
+
 
         /**Pedir permiso si es android 6.0 en adelante**/
         imgfoto.setOnClickListener( new View.OnClickListener() {
@@ -121,33 +132,8 @@ public class agregar_enmascotas extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     try {
-                        TextView tempval0 = findViewById( R.id.txtCodigoMasc );
-                        String Codigo = tempval0.getText().toString();
-                        TextView tempval1 = findViewById( R.id.txtNombreMasc );
-                        String nombre = tempval1.getText().toString();
-                        TextView tempval2 = findViewById( R.id.txtPrecioMasc );
-                        String precio = tempval2.getText().toString();
-                        TextView tempval3 = findViewById( R.id.txtMarcaMasc );
-                        String marca = tempval3.getText().toString(),
-                                id = mibd.push().getKey();
-                        Mascotas user = new Mascotas( Codigo,nombre,precio,marca,urlCompletaImg,Mitoken);
-                        if (id != null) {
-                            mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText( getApplicationContext(), "Producto guardado con exito", Toast.LENGTH_LONG ).show();
-                                    Intent intent = new Intent( getApplicationContext(), listamascotas.class );
-                                    startActivity( intent );
-                                }
-                            } ).addOnFailureListener( new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText( getApplicationContext(), "Error al crear el Producto en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
-                                }
-                            } );
-                        } else {
-                            Toast.makeText( getApplicationContext(), "Error al crear el Producto", Toast.LENGTH_LONG ).show();
-                        }
+                        subirFileFirestoreMas();
+
                     } catch (Exception ex) {
                         //En caso de error
                         Toast.makeText( getApplicationContext(), "Error al intentar guardar Producto" + ex.getMessage(), Toast.LENGTH_LONG ).show();
@@ -238,7 +224,82 @@ public class agregar_enmascotas extends AppCompatActivity {
             startActivity( intent );
         }
 
+/**Privates voids**/
+private void subirFileFirestoreMas(){
+    Toast.makeText(getApplicationContext(), "Te informaremos cuando la foto se suba a firestoire",Toast.LENGTH_SHORT).show();
+    StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+    Uri file = Uri.fromFile(new File(urlCompletaImg));
+    final StorageReference riversRef = storageRef.child("images/"+file.getLastPathSegment());
 
+    final UploadTask uploadTask = riversRef.putFile(file);
+    uploadTask.addOnFailureListener(new OnFailureListener() {
+        @Override
+        public void onFailure(@NonNull Exception e) {
+            Toast.makeText(getApplicationContext(), "Fallo el intento de subir la foto a firestore: "+ e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+    });
+    uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        @Override
+        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            Toast.makeText(getApplicationContext(), "Listo se subio la foto a firestore",Toast.LENGTH_SHORT).show();
+            Task<Uri> downloadUri = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    return riversRef.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if(task.isSuccessful()) {
+                        urlCompletaImgFirestore = task.getResult().toString();
+                        guardarDatosFirebaseMas();
+                    }
+                }
+            });
+        }
+    });
+}
+    private void guardarDatosFirebaseMas(){
+    try {
+        TextView tempval0 = findViewById( R.id.txtCodigoMasc );
+        String Codigo = tempval0.getText().toString();
+        TextView tempval1 = findViewById( R.id.txtNombreMasc );
+        String nombre = tempval1.getText().toString();
+        TextView tempval2 = findViewById( R.id.txtPrecioMasc );
+        String precio = tempval2.getText().toString();
+        TextView tempval3 = findViewById( R.id.txtMarcaMasc );
+        String marca = tempval3.getText().toString(),
+                id = mibd.push().getKey();
+
+        if( miToken=="" || miToken==null ){
+            miToken = MyFirebaseInstanceIdServices.mitoken; }
+        if( miToken!="" ||  miToken!=null) {
+
+            Mascotas user = new Mascotas( Codigo,nombre,precio,marca, urlCompletaImg, urlCompletaImgFirestore,miToken);
+            if (id != null) {
+                mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText( getApplicationContext(), "Producto guardado con exito", Toast.LENGTH_LONG ).show();
+                        Intent intent = new Intent( getApplicationContext(), listamascotas.class );
+                        startActivity( intent );
+                    }
+                } ).addOnFailureListener( new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText( getApplicationContext(), "Error al crear el Producto en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
+                    }
+                } );
+            } else {
+                Toast.makeText( getApplicationContext(), "Error al crear el Producto", Toast.LENGTH_LONG ).show();
+            }}
+
+
+
+    } catch (Exception ex){
+
+    }
+    }
 
 
 

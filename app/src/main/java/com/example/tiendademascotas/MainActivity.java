@@ -183,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
         }
         /**Guardar datos en Firebase**/
         private void guardarDatosFirebase(){
+
+            try{
             TextView tempval = findViewById( R.id.txtSesionnombre );
             TextView tempval2 = findViewById( R.id.txtcorreo );
             TextView tempval3 = findViewById( R.id.txtcontra );
@@ -191,26 +193,30 @@ public class MainActivity extends AppCompatActivity {
             String nombre = tempval.getText().toString(),
 
                     id = mibd.push().getKey();
-            Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, urlCompletaImgFirestore, miToken );
+            if( miToken=="" || miToken==null ){
+                miToken = MyFirebaseInstanceIdServices.mitoken; }
+            if( miToken!="" ||  miToken!=null) {
+                Usuarios user = new Usuarios( nombre, email,contra, urlCompletaImg, urlCompletaImgFirestore, miToken );
+                if (id != null) {
+                    mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText( getApplicationContext(), "Registro guardado con exito", Toast.LENGTH_LONG ).show();
+                            Intent intent = new Intent( getApplicationContext(), listamascotas.class );
+                            startActivity( intent );
+                        }
+                    } ).addOnFailureListener( new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText( getApplicationContext(), "Error al crear el registro en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
 
-            if (id != null) {
-                mibd.child( id ).setValue( user ).addOnSuccessListener( new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText( getApplicationContext(), "Registro guardado con exito", Toast.LENGTH_LONG ).show();
-                        Intent intent = new Intent( getApplicationContext(), listamascotas.class );
-                        startActivity( intent );
-                    }
-                } ).addOnFailureListener( new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText( getApplicationContext(), "Error al crear el registro en la Base de Datos" + e.getMessage(), Toast.LENGTH_LONG ).show();
-
-                    }
-                } );
-
-            } else {
+                        }
+                    } );
+            }  } else {
                 Toast.makeText( getApplicationContext(), "Error al crear el registro", Toast.LENGTH_LONG ).show();
+            }
+            } catch ( Exception ex){
+
             }
         }
 
